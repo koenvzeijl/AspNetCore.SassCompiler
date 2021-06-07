@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <PackageId>AspNetCore.Sass</PackageId>
+    <Version>0.1</Version>
+    <Authors>koenvzeijl,Michaelvs97</Authors>
+    <Description>Sass Compiler Library for .NET Core 3.x/5.x</Description>
+    <PackageDescription>Sass Compiler Library for .NET Core 3.x/5.x</PackageDescription>
+    <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.Sass</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Title>AspNetCore.Sass</Title>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <ContentWithTargetPath Include="dart-sass\Windows\sass.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sass.bat</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dart-sass\Windows\src\dart.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>src\dart.exe</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dart-sass\Windows\src\sass.snapshot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>src\sass.snapshot</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+    <ContentWithTargetPath Include="dart-sass\Linux\sass">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sass</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
+    <ContentWithTargetPath Include="dart-sass\OSX\sass">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sass</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dart-sass\OSX\src\dart">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>src\dart</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dart-sass\OSX\src\sass.snapshot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>src\sass.snapshot</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+</Project>
