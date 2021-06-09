@@ -25,9 +25,9 @@ namespace AspNetCore.Sass.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.CompileSass(Configuration.GetSection("SassCompiler"))
-                .FromFolder("/a/different/folder")
-                .ToFolder("/not/wwwroot");
+            //services.CompileSass();
+                //.FromFolder("/a/different/folder")
+                //.ToFolder("/not/wwwroot");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

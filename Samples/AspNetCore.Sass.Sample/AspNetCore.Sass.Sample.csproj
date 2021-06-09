@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AspNetCore.SaSS\AspNetCore.SaSS.csproj" />
+    <ProjectReference Include="..\..\AspNetCore.Sass\AspNetCore.Sass.csproj" />
   </ItemGroup>
 
 </Project>

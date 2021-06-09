@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,9 +10,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
+[assembly: HostingStartup(typeof(AspNetCore.SaSS.SassCompilerHostedService))]
 namespace AspNetCore.SaSS
 {
-    internal sealed class SassCompilerHostedService : IHostedService, IDisposable
+    internal sealed class SassCompilerHostedService : IHostedService, IHostingStartup, IDisposable
     {
         private readonly ILogger<SassCompilerHostedService> _logger;
         private readonly SassOptions _sassOptions;
@@ -21,6 +23,10 @@ namespace AspNetCore.SaSS
         public SassCompilerHostedService(IOptions<SassOptions> sassOptions, ILogger<SassCompilerHostedService> logger)
         {
             _sassOptions = sassOptions.Value;
+
+            _sassOptions.TargetFolder.Replace('\\','/');
+            _sassOptions.SourceFolder.Replace('\\','/');
+
             _logger = logger;
         }
 
@@ -55,7 +61,7 @@ namespace AspNetCore.SaSS
 
             _process = new Process();
             _process.StartInfo.FileName = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sass" + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".bat" : ""));
-            _process.StartInfo.Arguments = $"--error-css --watch {rootFolder}\\{_sassOptions.SourceFolder}\\site.scss {rootFolder}\\{_sassOptions.TargetFolder}\\site_sass.css";
+            _process.StartInfo.Arguments = $"--error-css --watch {rootFolder}\\{_sassOptions.SourceFolder}:{rootFolder}\\{_sassOptions.TargetFolder}";
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             _process.StartInfo.CreateNoWindow = true;
             _process.StartInfo.UseShellExecute = false;
@@ -94,6 +100,14 @@ namespace AspNetCore.SaSS
 
             await Task.Delay(1000);
             StartProcess();
+        }
+
+        public void Configure(IWebHostBuilder builder)
+        {
+            builder.ConfigureServices((config, services) =>
+            {
+                services.CompileSass();
+            });
         }
     }
 }
