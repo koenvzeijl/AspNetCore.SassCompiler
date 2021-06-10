@@ -23,8 +23,8 @@ namespace AspNetCore.SassCompiler
 
         public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
         {
-            _sourceFolder = configuration["SassCompiler:SourceFolder"].Replace('\\', '/');
-            _targetFolder = configuration["SassCompiler:TargetFolder"].Replace('\\', '/');
+            _sourceFolder = configuration["SassCompiler:SourceFolder"]?.Replace('\\', '/') ?? "Styles";
+            _targetFolder = configuration["SassCompiler:TargetFolder"]?.Replace('\\', '/') ?? "wwwroot/css";
 
             _logger = logger;
         }
