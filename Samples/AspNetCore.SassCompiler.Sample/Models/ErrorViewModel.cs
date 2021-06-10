@@ -1,6 +1,6 @@
 using System;
 
-namespace AspNetCore.Sass.Sample.Models
+namespace AspNetCore.SassCompiler.Sample.Models
 {
     public class ErrorViewModel
     {
