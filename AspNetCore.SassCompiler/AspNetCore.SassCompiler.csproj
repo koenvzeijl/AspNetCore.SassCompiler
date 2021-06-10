@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
-    <PackageId>AspNetCore.Sass</PackageId>
+    <PackageId>AspNetCore.SassCompiler</PackageId>
     <Version>0.1.0</Version>
     <Authors>koenvzeijl,Michaelvs97</Authors>
-    <Description>Sass Compiler Library for .NET Core 3.x/5.x</Description>
-    <PackageDescription>Sass Compiler Library for .NET Core 3.x/5.x</PackageDescription>
-    <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.Sass</RepositoryUrl>
+    <Description>SassCompiler Compiler Library for .NET Core 3.x/5.x</Description>
+    <PackageDescription>SassCompiler Compiler Library for .NET Core 3.x/5.x</PackageDescription>
+    <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Title>AspNetCore.Sass</Title>
+    <Title>AspNetCore.SassCompiler</Title>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 

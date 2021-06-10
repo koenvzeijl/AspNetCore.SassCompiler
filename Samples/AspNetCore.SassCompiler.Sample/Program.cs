@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Sass.Sample
+namespace AspNetCore.SassCompiler.Sample
 {
     public class Program
     {

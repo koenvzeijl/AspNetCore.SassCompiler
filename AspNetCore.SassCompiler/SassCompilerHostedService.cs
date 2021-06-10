@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,23 +8,22 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
-[assembly: HostingStartup(typeof(AspNetCore.Sass.SassCompilerHostedService))]
-namespace AspNetCore.Sass
+namespace AspNetCore.SassCompiler
 {
-    internal sealed class SassCompilerHostedService : IHostedService, IHostingStartup, IDisposable
+    internal sealed class SassCompilerHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<SassCompilerHostedService> _logger;
-        private readonly SassOptions _sassOptions;
+        private readonly string _sourceFolder;
+        private readonly string _targetFolder;
 
         private Process _process;
 
-        public SassCompilerHostedService(IOptions<SassOptions> sassOptions, ILogger<SassCompilerHostedService> logger)
+        public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
         {
-            _sassOptions = sassOptions.Value;
-
-            _sassOptions.TargetFolder.Replace('\\','/');
-            _sassOptions.SourceFolder.Replace('\\','/');
+            _sourceFolder = configuration["SassCompiler:SourceFolder"].Replace('\\', '/');
+            _targetFolder = configuration["SassCompiler:TargetFolder"].Replace('\\', '/');
 
             _logger = logger;
         }
@@ -100,14 +98,6 @@ namespace AspNetCore.Sass
 
             await Task.Delay(1000);
             StartProcess();
-        }
-
-        public void Configure(IWebHostBuilder builder)
-        {
-            builder.ConfigureServices((config, services) =>
-            {
-                services.CompileSass();
-            });
         }
     }
 }

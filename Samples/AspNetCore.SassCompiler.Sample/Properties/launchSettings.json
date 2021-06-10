@@ -16,7 +16,7 @@
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
       }
     },
-    "AspNetCore.Sass.Sample": {
+    "AspNetCore.SassCompiler.Sample": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

@@ -1,16 +1,10 @@
-using AspNetCore.Sass;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace AspNetCore.Sass.Sample
+namespace AspNetCore.SassCompiler.Sample
 {
     public class Startup
     {
@@ -25,9 +19,10 @@ namespace AspNetCore.Sass.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //services.CompileSass();
-                //.FromFolder("/a/different/folder")
-                //.ToFolder("/not/wwwroot");
+
+#if DEBUG
+            services.AddSassCompiler();
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
