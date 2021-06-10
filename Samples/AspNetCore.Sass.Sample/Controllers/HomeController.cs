@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Sass.Sample.Models;
-using AspNetCore.SaSS;
+using AspNetCore.Sass;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

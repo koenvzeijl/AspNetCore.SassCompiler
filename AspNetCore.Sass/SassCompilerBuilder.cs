@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCore.SaSS
+namespace AspNetCore.Sass
 {
     public class SassCompilerBuilder
     {
@@ -17,9 +17,9 @@ namespace AspNetCore.SaSS
         public virtual IServiceCollection Services { get; }
 
         /// <summary>
-        /// Define or overwrite the configured folder that contains the SaSS style files.
+        /// Define or overwrite the configured folder that contains the Sass style files.
         /// </summary>
-        /// <param name="sourceFolder">The source folder that contains the SaSS style files</param>
+        /// <param name="sourceFolder">The source folder that contains the Sass style files</param>
         public SassCompilerBuilder FromFolder(string sourceFolder)
         {
             Services.PostConfigure<SassOptions>(sassOptions =>
@@ -30,7 +30,7 @@ namespace AspNetCore.SaSS
         }
 
         /// <summary>
-        /// Define or overwrite the configured folder the SaSS compiler should write the css files to.
+        /// Define or overwrite the configured folder the Sass compiler should write the css files to.
         /// </summary>
         /// <param name="targetFolder">The target folder for the css files</param>
         public SassCompilerBuilder ToFolder(string targetFolder)

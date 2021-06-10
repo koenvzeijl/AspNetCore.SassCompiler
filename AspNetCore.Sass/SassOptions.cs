@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.SaSS
+﻿namespace AspNetCore.Sass
 {
     public class SassOptions
     {

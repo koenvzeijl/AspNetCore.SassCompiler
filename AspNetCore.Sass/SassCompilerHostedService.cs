@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-[assembly: HostingStartup(typeof(AspNetCore.SaSS.SassCompilerHostedService))]
-namespace AspNetCore.SaSS
+[assembly: HostingStartup(typeof(AspNetCore.Sass.SassCompilerHostedService))]
+namespace AspNetCore.Sass
 {
     internal sealed class SassCompilerHostedService : IHostedService, IHostingStartup, IDisposable
     {
@@ -96,7 +96,7 @@ namespace AspNetCore.SaSS
             _process.Dispose();
             _process = null;
 
-            _logger.LogWarning("SaSS compiler exited, restarting in 1 second.");
+            _logger.LogWarning("Sass compiler exited, restarting in 1 second.");
 
             await Task.Delay(1000);
             StartProcess();

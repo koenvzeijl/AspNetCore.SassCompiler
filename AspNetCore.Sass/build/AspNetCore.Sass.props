@@ -1,13 +1,13 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <SassBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\sass.bat</SassBuildCommand>
-    <SassBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassBuildCommand>
-    <SassBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\sass</SassBuildCommand>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\sass.bat</SassCompilerBuildCommand>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassCompilerBuildCommand>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\sass</SassCompilerBuildCommand>
 
-    <DotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</DotNetJsonDll>
+    <SassCompilerDotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</SassCompilerDotNetJsonDll>
 
-    <SassAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassAppsettingsJson>
+    <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
   </PropertyGroup>
 
 </Project>

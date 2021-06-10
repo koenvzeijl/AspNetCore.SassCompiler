@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCore.SaSS
+namespace AspNetCore.Sass
 {
     public static class ServiceCollectionExtensions
     {
