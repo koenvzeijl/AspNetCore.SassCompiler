@@ -27,7 +27,7 @@ jobs:
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
-        PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.Sass.csproj
+        PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.SassCompiler.csproj
         PACKAGE_NAME: AspNetCore.SassCompiler
       env:
         NUGET_KEY: ${{ secrets.NUGET_KEY }}
