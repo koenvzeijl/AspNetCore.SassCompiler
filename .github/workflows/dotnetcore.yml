@@ -1,0 +1,43 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish NuGet
+      id: publish_nuget
+      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.Sass.csproj
+        PACKAGE_NAME: AspNetCore.SassCompiler
+      env:
+        NUGET_KEY: ${{ secrets.NUGET_KEY }}
+    - name: Create release
+      id: create_release
+      if: success() && steps.publish_nuget.outputs.version != ''
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ steps.publish_nuget.outputs.version }}
+        release_name: ${{ steps.publish_nuget.outputs.version }}
+        body: ""
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
