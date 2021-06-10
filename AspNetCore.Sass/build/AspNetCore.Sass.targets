@@ -1,0 +1,13 @@
+﻿<Project>
+
+  <Target Name="Generate SaSS" BeforeTargets="CopyFilesToOutputDirectory">
+    <Exec ConsoleToMSBuild="true" Command="dotnet $(DotNetJsonDll) get $(SassAppsettingsJson) SassCompiler:SourceFolder">
+      <Output TaskParameter="ConsoleOutput" PropertyName="SourceFolder" />
+    </Exec>
+    <Exec ConsoleToMSBuild="true" Command="dotnet $(DotNetJsonDll) get $(SassAppsettingsJson) SassCompiler:TargetFolder">
+      <Output TaskParameter="ConsoleOutput" PropertyName="TargetFolder" />
+    </Exec>
+    <Exec Command="$(SassBuildCommand) $(ProjectDir)$(SourceFolder):$(ProjectDir)$(TargetFolder)" />
+  </Target>
+
+</Project>
