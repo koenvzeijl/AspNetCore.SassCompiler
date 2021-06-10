@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -55,11 +56,17 @@ namespace AspNetCore.SassCompiler
         private void StartProcess()
         {
             var rootFolder = Directory.GetCurrentDirectory();
-            var binFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var fileName = GetSassCommand();
+            if (fileName == null)
+            {
+                _logger.LogError("sass command not found, not watching for changes.");
+                return;
+            }
 
             _process = new Process();
-            _process.StartInfo.FileName = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sass" + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".bat" : ""));
-            _process.StartInfo.Arguments = $"--error-css --watch {rootFolder}\\{_sassOptions.SourceFolder}:{rootFolder}\\{_sassOptions.TargetFolder}";
+            _process.StartInfo.FileName = fileName;
+            _process.StartInfo.Arguments = $"--error-css --watch {rootFolder}/{_sourceFolder}:{rootFolder}//{_targetFolder}";
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             _process.StartInfo.CreateNoWindow = true;
             _process.StartInfo.UseShellExecute = false;
@@ -86,7 +93,7 @@ namespace AspNetCore.SassCompiler
             _process.BeginOutputReadLine();
             _process.BeginErrorReadLine();
 
-            _logger.LogInformation("Started NPM watch");
+            _logger.LogInformation("Started Sass watch");
         }
 
         private async void HandleProcessExit(object sender, object args)
@@ -98,6 +105,13 @@ namespace AspNetCore.SassCompiler
 
             await Task.Delay(1000);
             StartProcess();
+        }
+
+        private string GetSassCommand()
+        {
+            var attribute = Assembly.GetEntryAssembly().GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
+
+            return attribute?.SassBinary;
         }
     }
 }
