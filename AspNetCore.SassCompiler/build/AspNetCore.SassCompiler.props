@@ -8,6 +8,9 @@
     <SassCompilerDotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</SassCompilerDotNetJsonDll>
 
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
+
+    <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
+    <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
   </PropertyGroup>
 
   <ItemGroup>
