@@ -6,7 +6,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
-    <RootNamespace>AspNetCore.SassCompiler.Sample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
