@@ -8,7 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
 
     steps:
     - uses: actions/checkout@v2
@@ -22,9 +27,14 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
     - name: Publish NuGet
       id: publish_nuget
-      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
         PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.SassCompiler.csproj
