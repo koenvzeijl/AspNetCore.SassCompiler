@@ -28,11 +28,14 @@ After adding the package, the Sass styles from the SourceFolder (defaults to: St
 ## Sass watcher
 To use the Sass watcher in your project, you must add the following code to your startup.cs:
 ```csharp
-		public void ConfigureServices(IServiceCollection services) {
+public void ConfigureServices(IServiceCollection services) 
+{
+  
 #if DEBUG
-			services.AddSassCompiler();
+  services.AddSassCompiler();
 #endif
-		}
+
+}
 ```
 
 I recommend adding the `#if DEBUG` statement to only use a watcher during debug mode.
@@ -40,4 +43,4 @@ I recommend adding the `#if DEBUG` statement to only use a watcher during debug 
 ## Examples
 As an example, a configured version of a .NET 5.0 project is added in the /Samples folder. Please see the link below for quick access
 
-[.NET Core 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
+[.NET 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
