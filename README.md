@@ -38,6 +38,6 @@ To use the Sass watcher in your project, you must add the following code to your
 I recommend adding the `#if DEBUG` statement to only use a watcher during debug mode.
 
 ## Examples
-As an example, a configured version of a .NET 5.0 project is added in the /samples folder. Please see the link below for quick access
+As an example, a configured version of a .NET 5.0 project is added in the /Samples folder. Please see the link below for quick access
 
 [.NET Core 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
