@@ -1,5 +1,5 @@
-﻿using AspNetCore.Sass.Sample.Models;
-using AspNetCore.SaSS;
+﻿using AspNetCore.SassCompiler.Sample.Models;
+using AspNetCore.SassCompiler;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Sass.Sample.Controllers
+namespace AspNetCore.SassCompiler.Sample.Controllers
 {
     public class HomeController : Controller
     {

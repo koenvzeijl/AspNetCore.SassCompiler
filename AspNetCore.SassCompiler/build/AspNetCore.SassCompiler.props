@@ -1,0 +1,19 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\sass.bat</SassCompilerBuildCommand>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassCompilerBuildCommand>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\sass</SassCompilerBuildCommand>
+
+    <SassCompilerDotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</SassCompilerDotNetJsonDll>
+
+    <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="AspNetCore.SassCompiler.SassCompilerAttribute">
+      <_Parameter1>$(SassCompilerBuildCommand)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
