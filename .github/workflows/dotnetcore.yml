@@ -33,6 +33,9 @@ jobs:
     needs: [ build ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Publish NuGet
       id: publish_nuget
       uses: brandedoutcast/publish-nuget@v2.5.5
