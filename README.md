@@ -22,8 +22,8 @@ To adjust any of the default configuration, please add one or more of the follow
 {
   "SassCompiler": {
     "SourceFolder": "Styles",
-    "TargetFolder": "wwwroot\\css"
-	"Arguments": "--style=compressed"
+    "TargetFolder": "wwwroot\\css",
+    "Arguments": "--style=compressed"
   }
 }
 ```
