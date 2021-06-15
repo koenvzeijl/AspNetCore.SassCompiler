@@ -8,7 +8,8 @@
           StandardOutputImportance="low"
           IgnoreExitCode="true"
           Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:SourceFolder">
-      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerSourceFolder" Condition="'$(ExitCode)' == '0'" />
+      <Output TaskParameter="ExitCode" PropertyName="SassCompilerSourceFolderExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerSourceFolder" Condition="'$(SassCompilerSourceFolderExitCode)' == '0'" />
     </Exec>
     <Exec ConsoleToMSBuild="true"
           ContinueOnError="true"
@@ -17,9 +18,20 @@
           StandardOutputImportance="low"
           IgnoreExitCode="true"
           Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:TargetFolder">
-      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerTargetFolder" Condition="'$(ExitCode)' == '0'" />
+      <Output TaskParameter="ExitCode" PropertyName="SassCompilerTargetFolderExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerTargetFolder" Condition="'$(SassCompilerTargetFolderExitCode)' == '0'" />
     </Exec>
-    <Exec Command="$(SassCompilerBuildCommand) $(ProjectDir)$(SassCompilerSourceFolder):$(ProjectDir)$(SassCompilerTargetFolder)" />
+    <Exec ConsoleToMSBuild="true"
+      ContinueOnError="true"
+      EchoOff="true"
+      StandardErrorImportance="low"
+      StandardOutputImportance="low"
+      IgnoreExitCode="true"
+      Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:Arguments">
+      <Output TaskParameter="ExitCode" PropertyName="SassCompilerArgumentsExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerArguments" Condition="'$(SassCompilerArgumentsExitCode)' == '0'" />
+    </Exec>
+    <Exec Command="$(SassCompilerBuildCommand) $(SassCompilerArguments) $(ProjectDir)$(SassCompilerSourceFolder):$(ProjectDir)$(SassCompilerTargetFolder)" />
   </Target>
 
 </Project>
