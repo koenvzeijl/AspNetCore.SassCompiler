@@ -11,6 +11,7 @@
 
     <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed</SassCompilerArguments>
   </PropertyGroup>
 
   <ItemGroup>
