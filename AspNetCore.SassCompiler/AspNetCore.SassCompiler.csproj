@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
     <PackageId>AspNetCore.SassCompiler</PackageId>
     <Version>1.0.1</Version>
-    <Authors>KoenvZeijl,SLeeuwen,Michaelvs97</Authors>
+    <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
     <Description>Sass Compiler Library for .NET Core 3.x/5.x. without node</Description>
     <PackageDescription>Sass Compiler Library for .NET Core 3.x/5.x. without node</PackageDescription>
     <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
