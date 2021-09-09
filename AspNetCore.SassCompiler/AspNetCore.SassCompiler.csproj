@@ -7,6 +7,7 @@
     <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
     <Description>Sass Compiler Library for .NET Core 3.x/5.x. without node</Description>
     <PackageDescription>Sass Compiler Library for .NET Core 3.x/5.x. without node</PackageDescription>
+    <PackageTags>sass;scss;aspnetcore;dart-sass;compiler;watch;</PackageTags>
     <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.SassCompiler</Title>
