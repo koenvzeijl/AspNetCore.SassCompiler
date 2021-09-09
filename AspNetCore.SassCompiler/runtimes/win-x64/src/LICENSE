@@ -314,7 +314,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 
-charcode, glob, http_parser, matcher, path, pool, pub_semver, shelf_web_socket,
+charcode, glob, http_parser, path, pool, pub_semver, shelf_web_socket,
 source_maps, source_span, stack_trace, string_scanner, watcher and yaml license:
 
 Copyright 2014, the Dart project authors. All rights reserved.
@@ -888,7 +888,7 @@ coverage and quiver license:
 
 --------------------------------------------------------------------------------
 
-dart_style, http, shelf and test license:
+dart_style, http, matcher, shelf and test license:
 
 Copyright 2014, the Dart project authors. 
 
