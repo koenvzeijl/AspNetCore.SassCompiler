@@ -12,6 +12,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.SassCompiler</Title>
     <LangVersion>8.0</LangVersion>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="build\*" Pack="true" PackagePath="build" Visible="false" />
     <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false" />
   </ItemGroup>
