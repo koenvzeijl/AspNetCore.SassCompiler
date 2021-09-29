@@ -66,7 +66,7 @@ namespace AspNetCore.SassCompiler
 
             _process = new Process();
             _process.StartInfo.FileName = fileName;
-            _process.StartInfo.Arguments = $"--error-css --watch {rootFolder}/{_sourceFolder}:{rootFolder}//{_targetFolder}";
+            _process.StartInfo.Arguments = $"--error-css --watch \"{rootFolder}/{_sourceFolder}\":\"{rootFolder}/{_targetFolder}\"";
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             _process.StartInfo.CreateNoWindow = true;
             _process.StartInfo.UseShellExecute = false;
