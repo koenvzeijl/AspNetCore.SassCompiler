@@ -111,7 +111,31 @@ namespace AspNetCore.SassCompiler
         {
             var attribute = Assembly.GetEntryAssembly().GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
 
-            return attribute?.SassBinary;
+            if (attribute != null)
+                return attribute.SassBinary;
+
+            var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
+
+            string exePath;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                exePath = "runtimes\\win-x64\\sass.bat";
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                exePath = "runtimes/linux-x64/sass";
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                exePath = "runtimes/osx-x64/sass";
+            else
+                return null;
+
+            var directory = Path.GetDirectoryName(assemblyLocation);
+            while (!string.IsNullOrEmpty(directory) && directory != "/")
+            {
+                if (File.Exists(Path.Join(directory, exePath)))
+                    return Path.Join(directory, exePath);
+
+                directory = Path.GetDirectoryName(directory);
+            }
+
+            return null;
         }
     }
 }
