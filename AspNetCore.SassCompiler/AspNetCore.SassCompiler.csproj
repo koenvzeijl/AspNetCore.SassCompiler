@@ -32,8 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="build\*" Pack="true" PackagePath="build" Visible="false"/>
-        <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false"/>
+        <None Include="build\*" Pack="true" PackagePath="build" Visible="true"/>
+        <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="true"/>
         <None Include="..\logo.png" Pack="true" PackagePath="\"/>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
