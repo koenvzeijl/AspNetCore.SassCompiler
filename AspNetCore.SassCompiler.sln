@@ -9,6 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{737B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Sample", "Samples\AspNetCore.SassCompiler.Sample\AspNetCore.SassCompiler.Sample.csproj", "{0C3BCE5E-F28F-409C-8681-1C5E4AF34ABA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FEB9C832-290F-463E-B041-B378BFC2F475}"
+ProjectSection(SolutionItems) = preProject
+	.nuget\NuGet.Config = .nuget\NuGet.Config
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
