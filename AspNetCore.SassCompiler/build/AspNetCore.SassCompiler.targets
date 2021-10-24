@@ -1,5 +1,12 @@
 ﻿<Project>
 
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Debug'">
+    <Message Importance="High" Text="[SassCompiler]: DotNetJsonDll: $(SassCompilerDotNetJsonDll)" />
+    <Message Importance="High" Text="[SassCompiler]: AppsettingsJson: $(SassCompilerAppsettingsJson)" />
+    <Message Importance="High" Text="[SassCompiler]: BuildCommand: $(SassCompilerBuildCommand)" />
+    <Message Importance="High" Text="[SassCompiler]: Arguments: $(SassCompilerArguments)" />
+  </Target>
+
   <Target Name="Generate Sass" BeforeTargets="CopyFilesToOutputDirectory">
     <Exec ConsoleToMSBuild="true"
           ContinueOnError="true"
