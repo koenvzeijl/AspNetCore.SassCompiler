@@ -59,7 +59,7 @@ namespace AspNetCore.SassCompiler
             var fileName = GetSassCommand();
             if (fileName == null)
             {
-                _logger.LogError("sass command not found, not watching for changes.");
+                _logger.LogError("Sass command not found, not watching for changes");
                 return;
             }
 
@@ -100,7 +100,7 @@ namespace AspNetCore.SassCompiler
             _process.Dispose();
             _process = null;
 
-            _logger.LogWarning("Sass compiler exited, restarting in 1 second.");
+            _logger.LogWarning("Sass compiler exited, restarting in 1 second");
 
             await Task.Delay(1000);
             StartProcess();
