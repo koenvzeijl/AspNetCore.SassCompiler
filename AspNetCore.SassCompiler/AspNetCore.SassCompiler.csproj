@@ -1,34 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageId>AspNetCore.SassCompiler</PackageId>
-    <Version>1.43.3</Version>
-    <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
-    <Description>Sass Compiler Library for .NET without node</Description>
-    <PackageDescription>Sass Compiler Library for .NET without node, using dart-sass as a compiler</PackageDescription>
-    <PackageTags>sass;scss;aspnetcore;dart-sass;compiler;watch;</PackageTags>
-    <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Title>AspNetCore.SassCompiler</Title>
-    <LangVersion>8.0</LangVersion>
-    <PackageIcon>logo.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <IsPackable>true</IsPackable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>AspNetCore.SassCompiler</PackageId>
+        <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
+        <Description>Sass Compiler Library for .NET without node</Description>
+        <PackageDescription>Sass Compiler Library for .NET without node, using dart-sass as a compiler</PackageDescription>
+        <PackageTags>sass;scss;aspnetcore;dart-sass;compiler;watch;</PackageTags>
+        <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Title>AspNetCore.SassCompiler</Title>
+        <LangVersion>8.0</LangVersion>
+        <PackageIcon>logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+  
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <Deterministic>false</Deterministic>
+        <Version>1.43.4.$([System.DateTime]::UtcNow.TimeOfDay.TotalSeconds.ToString("#"))</Version>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <Version>1.43.4</Version>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="build\*" Pack="true" PackagePath="build" Visible="false" />
-    <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false" />
-    <None Include="..\logo.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="build\*" Pack="true" PackagePath="build" Visible="false"/>
+        <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false"/>
+        <None Include="..\logo.png" Pack="true" PackagePath="\"/>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
 </Project>
