@@ -38,7 +38,7 @@
       <Output TaskParameter="ExitCode" PropertyName="SassCompilerArgumentsExitCode" />
       <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerArguments" Condition="'$(SassCompilerArgumentsExitCode)' == '0'" />
     </Exec>
-    <Exec Command="&quot;$(SassCompilerBuildCommand)&quot; $(SassCompilerArguments) &quot;$(ProjectDir)$(SassCompilerSourceFolder)&quot;:&quot;$(ProjectDir)$(SassCompilerTargetFolder)&quot;" />
+    <Exec Command="&quot;$(SassCompilerBuildCommand)&quot; $(SassCompilerBuildSnapshot) $(SassCompilerArguments) &quot;$(ProjectDir)$(SassCompilerSourceFolder)&quot;:&quot;$(ProjectDir)$(SassCompilerTargetFolder)&quot;" />
   </Target>
 
 </Project>
