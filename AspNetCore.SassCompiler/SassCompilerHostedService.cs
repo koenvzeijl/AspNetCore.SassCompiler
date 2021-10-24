@@ -62,6 +62,10 @@ namespace AspNetCore.SassCompiler
                 _logger.LogError("Sass command not found, not watching for changes");
                 return;
             }
+            
+            // Kill process before start
+            var darts = Process.GetProcessesByName("dart");
+            foreach (var process in darts) process.Kill();
 
             _process = new Process();
             _process.StartInfo.FileName = fileName;
