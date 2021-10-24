@@ -108,7 +108,7 @@ namespace AspNetCore.SassCompiler
 
         private string GetSassCommand()
         {
-            var attribute = Assembly.GetEntryAssembly().GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
+            var attribute = Assembly.GetEntryAssembly()?.GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
 
             if (attribute != null)
                 return attribute.SassBinary;
