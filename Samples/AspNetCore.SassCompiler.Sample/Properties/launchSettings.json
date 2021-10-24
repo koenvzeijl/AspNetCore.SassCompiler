@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AspNetCore.SassCompiler.Sample2": {
+    "AspNetCore.SassCompiler.Sample": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
