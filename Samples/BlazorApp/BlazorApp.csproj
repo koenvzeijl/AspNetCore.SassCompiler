@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->
+  <Import Project="..\..\AspNetCore.SassCompiler\build\AspNetCore.SassCompiler.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" />
+  </ItemGroup>
+
+  <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->
+  <Import Project="..\..\AspNetCore.SassCompiler\build\AspNetCore.SassCompiler.targets" />
+
+</Project>

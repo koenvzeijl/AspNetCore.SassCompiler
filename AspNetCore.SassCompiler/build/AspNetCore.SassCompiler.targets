@@ -1,37 +1,19 @@
 ﻿<Project>
 
-  <Target Name="Generate Sass" BeforeTargets="CopyFilesToOutputDirectory">
-    <Exec ConsoleToMSBuild="true"
-          ContinueOnError="true"
-          EchoOff="true"
-          StandardErrorImportance="low"
-          StandardOutputImportance="low"
-          IgnoreExitCode="true"
-          Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:SourceFolder">
-      <Output TaskParameter="ExitCode" PropertyName="SassCompilerSourceFolderExitCode" />
-      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerSourceFolder" Condition="'$(SassCompilerSourceFolderExitCode)' == '0'" />
-    </Exec>
-    <Exec ConsoleToMSBuild="true"
-          ContinueOnError="true"
-          EchoOff="true"
-          StandardErrorImportance="low"
-          StandardOutputImportance="low"
-          IgnoreExitCode="true"
-          Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:TargetFolder">
-      <Output TaskParameter="ExitCode" PropertyName="SassCompilerTargetFolderExitCode" />
-      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerTargetFolder" Condition="'$(SassCompilerTargetFolderExitCode)' == '0'" />
-    </Exec>
-    <Exec ConsoleToMSBuild="true"
-      ContinueOnError="true"
-      EchoOff="true"
-      StandardErrorImportance="low"
-      StandardOutputImportance="low"
-      IgnoreExitCode="true"
-      Command="dotnet $(SassCompilerDotNetJsonDll) get $(SassCompilerAppsettingsJson) SassCompiler:Arguments">
-      <Output TaskParameter="ExitCode" PropertyName="SassCompilerArgumentsExitCode" />
-      <Output TaskParameter="ConsoleOutput" PropertyName="SassCompilerArguments" Condition="'$(SassCompilerArgumentsExitCode)' == '0'" />
-    </Exec>
-    <Exec Command="&quot;$(SassCompilerBuildCommand)&quot; $(SassCompilerBuildSnapshot) $(SassCompilerArguments) &quot;$(ProjectDir)$(SassCompilerSourceFolder)&quot;:&quot;$(ProjectDir)$(SassCompilerTargetFolder)&quot;" />
+  <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
+             AssemblyFile="$(SassCompilerAssembly)" />
+
+  <Target Name="Compile Sass" BeforeTargets="Build;ResolveScopedCssInputs">
+    <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
+                 Command="$(SassCompilerBuildCommand)"
+                 Snapshot="$(SassCompilerBuildSnapshot)">
+      <Output TaskParameter="GeneratedFiles"
+              ItemName="CompiledCssFiles" />
+    </CompileSass>
+
+    <ItemGroup>
+      <Content Include="@(CompiledCssFiles)" />
+    </ItemGroup>
   </Target>
 
 </Project>

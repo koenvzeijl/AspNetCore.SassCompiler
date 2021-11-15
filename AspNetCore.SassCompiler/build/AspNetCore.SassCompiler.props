@@ -1,4 +1,17 @@
-﻿<Project>
+﻿<Project TreatAsLocalProperty="_SassCompilerTFM">
+
+  <Choose>
+    <When Condition=" '$(TargetFramework)' == '' OR $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '5.0')) ">
+      <PropertyGroup>
+        <_SassCompilerTFM>net5.0</_SassCompilerTFM>
+      </PropertyGroup>
+    </When>
+    <When Condition=" $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '3.1')) ">
+      <PropertyGroup>
+        <_SassCompilerTFM>netcoreapp3.1</_SassCompilerTFM>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <PropertyGroup>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
@@ -8,13 +21,13 @@
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
 
-    <SassCompilerDotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</SassCompilerDotNetJsonDll>
-
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
 
     <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
-    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed</SassCompilerArguments>
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
+
+    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\$(_SassCompilerTFM)\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
   </PropertyGroup>
 
   <ItemGroup>

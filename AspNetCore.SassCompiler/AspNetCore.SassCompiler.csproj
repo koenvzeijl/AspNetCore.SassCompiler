@@ -18,14 +18,16 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.4.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.4.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="build\*" Pack="true" PackagePath="build" Visible="false" />
     <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false" />
-    <None Include="..\logo.png" Pack="true" PackagePath="\"/>
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\logo.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
