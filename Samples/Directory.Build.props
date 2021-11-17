@@ -1,20 +1,7 @@
 <Project TreatAsLocalProperty="_SassCompilerTFM">
 
-  <Choose>
-    <When Condition=" '$(TargetFramework)' == '' OR $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '5.0')) ">
-      <PropertyGroup>
-        <_SassCompilerTFM>net5.0</_SassCompilerTFM>
-      </PropertyGroup>
-    </When>
-    <When Condition=" $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '3.1')) ">
-      <PropertyGroup>
-        <_SassCompilerTFM>netcoreapp3.1</_SassCompilerTFM>
-      </PropertyGroup>
-    </When>
-  </Choose>
-
   <PropertyGroup>
-    <SassCompilerAssembly>$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler\bin\Debug\$(_SassCompilerTFM)\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
+    <SassCompilerAssembly>$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler\bin\Debug\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
   </PropertyGroup>
 
 </Project>

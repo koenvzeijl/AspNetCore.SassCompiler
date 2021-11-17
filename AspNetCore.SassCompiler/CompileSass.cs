@@ -43,8 +43,7 @@ namespace AspNetCore.SassCompiler
             if (File.Exists(AppsettingsFile))
             {
                 var text = File.ReadAllText(AppsettingsFile);
-                var json = JsonSerializer.Deserialize<JsonDocument>(text,
-                    new JsonSerializerOptions { AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip });
+                var json = JsonDocument.Parse(text, new JsonDocumentOptions { AllowTrailingCommas = true, CommentHandling = JsonCommentHandling.Skip });
 
                 if (json.RootElement.TryGetProperty("SassCompiler", out var sassCompiler))
                 {

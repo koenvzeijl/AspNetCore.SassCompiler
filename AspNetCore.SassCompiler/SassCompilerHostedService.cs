@@ -120,7 +120,10 @@ namespace AspNetCore.SassCompiler
             if (_options.GenerateScopedCss)
             {
                 foreach (var dir in _options.ScopedCssFolders)
-                    directories.Add($"\"{rootFolder}/{dir}\":\"{rootFolder}/{dir}\"");
+                {
+                    if (Directory.Exists($"{rootFolder}/{dir}"))
+                        directories.Add($"\"{rootFolder}/{dir}\":\"{rootFolder}/{dir}\"");
+                }
             }
 
             var process = new Process();

@@ -1,18 +1,5 @@
 ﻿<Project TreatAsLocalProperty="_SassCompilerTFM">
 
-  <Choose>
-    <When Condition=" '$(TargetFramework)' == '' OR $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '5.0')) ">
-      <PropertyGroup>
-        <_SassCompilerTFM>net5.0</_SassCompilerTFM>
-      </PropertyGroup>
-    </When>
-    <When Condition=" $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', '3.1')) ">
-      <PropertyGroup>
-        <_SassCompilerTFM>netcoreapp3.1</_SassCompilerTFM>
-      </PropertyGroup>
-    </When>
-  </Choose>
-
   <PropertyGroup>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
@@ -27,7 +14,7 @@
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
     <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
 
-    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\$(_SassCompilerTFM)\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
+    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
   </PropertyGroup>
 
   <ItemGroup>
