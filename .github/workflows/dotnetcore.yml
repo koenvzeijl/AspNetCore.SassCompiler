@@ -31,7 +31,7 @@ jobs:
       run: |
         test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
         test -s Samples/BlazorApp/Pages/Counter.razor.css
-        test -s Samples/BlazorApp/obj/Debug/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css
+        test -s Samples/BlazorApp/obj/Release/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css
 
   publish:
     runs-on: ubuntu-latest

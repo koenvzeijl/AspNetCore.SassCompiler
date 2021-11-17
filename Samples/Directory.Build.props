@@ -1,7 +1,7 @@
 <Project TreatAsLocalProperty="_SassCompilerTFM">
 
   <PropertyGroup>
-    <SassCompilerAssembly>$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler\bin\Debug\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
+    <SassCompilerAssembly>$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler\bin\$(Configuration)\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
   </PropertyGroup>
 
 </Project>
