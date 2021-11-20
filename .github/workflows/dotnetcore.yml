@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore -v:n
+      run: dotnet build --configuration Release --no-restore -v:diag
     - name: Validate generated css files
       run: |
         test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
