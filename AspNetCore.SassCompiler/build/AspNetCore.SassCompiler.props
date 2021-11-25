@@ -1,4 +1,4 @@
-﻿<Project>
+﻿<Project TreatAsLocalProperty="_SassCompilerTFM">
 
   <PropertyGroup>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
@@ -8,13 +8,13 @@
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
 
-    <SassCompilerDotNetJsonDll>$(MSBuildThisFileDirectory)..\runtimes\dotnet-json.dll</SassCompilerDotNetJsonDll>
-
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
 
     <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
-    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed</SassCompilerArguments>
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
+
+    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
   </PropertyGroup>
 
   <ItemGroup>

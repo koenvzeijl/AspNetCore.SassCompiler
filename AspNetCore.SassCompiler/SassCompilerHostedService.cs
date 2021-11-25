@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,17 +16,14 @@ namespace AspNetCore.SassCompiler
     internal sealed class SassCompilerHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<SassCompilerHostedService> _logger;
-        private readonly string _sourceFolder;
-        private readonly string _targetFolder;
-        private readonly string _arguments;
+        private readonly SassCompilerOptions _options;
 
         private Process _process;
 
         public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
         {
-            _sourceFolder = configuration["SassCompiler:SourceFolder"]?.Replace('\\', '/') ?? "Styles";
-            _targetFolder = configuration["SassCompiler:TargetFolder"]?.Replace('\\', '/') ?? "wwwroot/css";
-            _arguments = configuration["SassCompiler:Arguments"];
+            _options = new SassCompilerOptions();
+            configuration.GetSection("SassCompiler").Bind(_options);
 
             _logger = logger;
         }
@@ -117,9 +115,20 @@ namespace AspNetCore.SassCompiler
             if (command.Filename == null)
                 return null;
 
+            var directories = new List<string>();
+            directories.Add($"\"{rootFolder}/{_options.SourceFolder}\":\"{rootFolder}/{_options.TargetFolder}\"");
+            if (_options.GenerateScopedCss)
+            {
+                foreach (var dir in _options.ScopedCssFolders)
+                {
+                    if (Directory.Exists($"{rootFolder}/{dir}"))
+                        directories.Add($"\"{rootFolder}/{dir}\":\"{rootFolder}/{dir}\"");
+                }
+            }
+
             var process = new Process();
             process.StartInfo.FileName = command.Filename;
-            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_arguments} \"{rootFolder}/{_sourceFolder}\":\"{rootFolder}/{_targetFolder}\"";
+            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_options.Arguments} {string.Join(" ", directories)}";
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;

@@ -22,11 +22,16 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Install dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Validate generated css files
+      run: |
+        test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
+        test -s Samples/BlazorApp/Pages/Counter.razor.css
+        test -s Samples/BlazorApp/obj/Release/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css
 
   publish:
     runs-on: ubuntu-latest

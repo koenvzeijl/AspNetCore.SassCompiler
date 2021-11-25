@@ -1,7 +1,10 @@
 using System;
+using System.ComponentModel;
 
 namespace AspNetCore.SassCompiler
 {
+    [AttributeUsage(AttributeTargets.Assembly)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class SassCompilerAttribute : Attribute
     {
         public SassCompilerAttribute(string sassBinary, string sassSnapshot)
