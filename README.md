@@ -16,7 +16,7 @@ dotnet add package AspNetCore.SassCompiler
 
 ## Configuration
 After adding the package, the Sass styles from the SourceFolder (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
-You can also adjust the default (`--style=compressed`) dart-sass Arguments in the appsettings.json. Scoped CSS is now also supported for application that use blazor for example. This feature is enabled by default and will use the default scoped CSS folders as shown below. To disable this feature, change GenerateScopedCss to false.
+You can also adjust the default (`--style=compressed`) dart-sass Arguments in the appsettings.json. Scoped CSS is also supported for applications that use blazor for example. This feature is enabled by default and will use the default scoped CSS folders as shown below. To disable this feature, change GenerateScopedCss to false.
 To adjust any of the default configuration, please add one or more of the following settings to the appsettings.json:
 ```json
 {
