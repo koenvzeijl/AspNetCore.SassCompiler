@@ -1,4 +1,4 @@
-namespace BlazorApp.Data;
+namespace AspNetCore.SassCompiler.BlazorSample.Data;
 
 public class WeatherForecastService
 {
