@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{737B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Sample", "Samples\AspNetCore.SassCompiler.Sample\AspNetCore.SassCompiler.Sample.csproj", "{0C3BCE5E-F28F-409C-8681-1C5E4AF34ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "Samples\BlazorApp\BlazorApp.csproj", "{71BB1B42-AE01-43FB-9BCE-00B83745780B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.BlazorSample", "Samples\AspNetCore.SassCompiler.BlazorSample\AspNetCore.SassCompiler.BlazorSample.csproj", "{71BB1B42-AE01-43FB-9BCE-00B83745780B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

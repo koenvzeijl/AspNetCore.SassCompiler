@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "BlazorApp": {
+    "AspNetCore.SassCompiler.BlazorSample": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
