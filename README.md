@@ -23,7 +23,7 @@ To adjust any of the default configuration, please add one or more of the follow
   "SassCompiler": {
     "SourceFolder": "Styles",
     "TargetFolder": "wwwroot/css",
-    "Arguments": "--style=compressed"
+    "Arguments": "--style=compressed",
     "GenerateScopedCss": true,
     "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"]
     }
@@ -48,6 +48,8 @@ I recommend adding the `#if DEBUG` statement to only use a watcher during debug 
 
 ## Examples
 To provide you with examples, a configured version of a .NET 5.0 project and a configured .NET 6.0 Blazor app are added in the /Samples folder. Please see the link below for quick access
+
+[.NET Core 3.1](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample31)
 
 [.NET 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
 

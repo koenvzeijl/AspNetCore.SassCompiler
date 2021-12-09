@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <PackageId>AspNetCore.SassCompiler</PackageId>
-    <Version>1.44.0</Version>
+    <Version>1.44.0.1</Version>
     <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
     <Description>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node</Description>
     <PackageDescription>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node, using dart-sass as a compiler</PackageDescription>
@@ -18,16 +18,19 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.4.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.4.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\*" Pack="true" PackagePath="build" Visible="false" />
-    <None Include="runtimes\**" Pack="true" PackagePath="runtimes" Visible="false" />
+    <ProjectReference Include="..\AspNetCore.SassCompiler.Tasks\AspNetCore.SassCompiler.Tasks.csproj" ReferenceOutputAssembly="false" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\*" Pack="true" PackagePath="build" />
+    <None Include="runtimes\**" Pack="true" PackagePath="runtimes" />
     <None Include="..\logo.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\AspNetCore.SassCompiler.Tasks\bin\Release\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="false" />
   </ItemGroup>
 
 </Project>

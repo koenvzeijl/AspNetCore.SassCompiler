@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -43,24 +43,22 @@ namespace AspNetCore.SassCompiler
             if (File.Exists(AppsettingsFile))
             {
                 var text = File.ReadAllText(AppsettingsFile);
-                var json = JsonDocument.Parse(text, new JsonDocumentOptions { AllowTrailingCommas = true, CommentHandling = JsonCommentHandling.Skip });
+                var json = SimpleJson.SimpleJson.DeserializeObject(text);
 
-                if (json.RootElement.TryGetProperty("SassCompiler", out var sassCompiler))
+                if (json is IDictionary<string, object> root && root.TryGetValue("SassCompiler", out var value))
                 {
-                    if (sassCompiler.TryGetProperty("SourceFolder", out var sourceFolder))
-                        options.SourceFolder = sourceFolder.GetString();
-                    if (sassCompiler.TryGetProperty("TargetFolder", out var targetFolder))
-                        options.TargetFolder = targetFolder.GetString();
-                    if (sassCompiler.TryGetProperty("Arguments", out var arguments))
-                        options.Arguments = arguments.GetString();
-                    if (sassCompiler.TryGetProperty("GenerateScopedCss", out var generateScopedCss))
-                        options.GenerateScopedCss = generateScopedCss.GetBoolean();
-                    if (sassCompiler.TryGetProperty("ScopedCssFolders", out var scopedCssFolders))
+                    if (value is IDictionary<string, object> sassCompiler)
                     {
-                        options.ScopedCssFolders = new string[scopedCssFolders.GetArrayLength()];
-                        var i = 0;
-                        foreach (var folder in scopedCssFolders.EnumerateArray())
-                            options.ScopedCssFolders[i++] = folder.GetString();
+                        if (sassCompiler.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
+                            options.SourceFolder = sourceFolder;
+                        if (sassCompiler.TryGetValue("TargetFolder", out value) && value is string targetFolder)
+                            options.TargetFolder = targetFolder;
+                        if (sassCompiler.TryGetValue("Arguments", out value) && value is string arguments)
+                            options.Arguments = arguments;
+                        if (sassCompiler.TryGetValue("GenerateScopedCss", out value) && value is bool generateScopedCss)
+                            options.GenerateScopedCss = generateScopedCss;
+                        if (sassCompiler.TryGetValue("ScopedCssFolders", out value) && value is IList<object> scopedCssFolders)
+                            options.ScopedCssFolders = scopedCssFolders.Where(x => x is string).Cast<string>().ToArray();
                     }
                 }
             }
@@ -77,6 +75,7 @@ namespace AspNetCore.SassCompiler
                 {
                     FileName = Command,
                     Arguments = $"{Snapshot} {options.Arguments} {options.SourceFolder}:{options.TargetFolder} --update",
+                    UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -129,6 +128,7 @@ namespace AspNetCore.SassCompiler
             {
                 FileName = Command,
                 Arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update --no-source-map",
+                UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

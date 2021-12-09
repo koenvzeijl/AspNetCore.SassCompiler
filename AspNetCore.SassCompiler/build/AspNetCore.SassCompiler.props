@@ -14,7 +14,7 @@
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
     <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
 
-    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netcoreapp3.1\AspNetCore.SassCompiler.dll</SassCompilerAssembly>
+    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
   </PropertyGroup>
 
   <ItemGroup>
