@@ -29,6 +29,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Validate generated css files
       run: |
+        test -s Samples/AspNetCore.SassCompiler.Sample31/wwwroot/css/site_sass.css
         test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
         test -s Samples/AspNetCore.SassCompiler.BlazorSample/Pages/Counter.razor.css
         test -s Samples/AspNetCore.SassCompiler.BlazorSample/obj/Release/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css

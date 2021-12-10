@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.BlazorSample", "Samples\AspNetCore.SassCompiler.BlazorSample\AspNetCore.SassCompiler.BlazorSample.csproj", "{71BB1B42-AE01-43FB-9BCE-00B83745780B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Tasks", "AspNetCore.SassCompiler.Tasks\AspNetCore.SassCompiler.Tasks.csproj", "{D94EC0A7-0717-402C-A596-707F02194E73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Sample31", "Samples\AspNetCore.SassCompiler.Sample31\AspNetCore.SassCompiler.Sample31.csproj", "{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,14 @@ Global
 		{71BB1B42-AE01-43FB-9BCE-00B83745780B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71BB1B42-AE01-43FB-9BCE-00B83745780B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71BB1B42-AE01-43FB-9BCE-00B83745780B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94EC0A7-0717-402C-A596-707F02194E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94EC0A7-0717-402C-A596-707F02194E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94EC0A7-0717-402C-A596-707F02194E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94EC0A7-0717-402C-A596-707F02194E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +54,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0C3BCE5E-F28F-409C-8681-1C5E4AF34ABA} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
 		{71BB1B42-AE01-43FB-9BCE-00B83745780B} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
+		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
 	EndGlobalSection
 EndGlobal
