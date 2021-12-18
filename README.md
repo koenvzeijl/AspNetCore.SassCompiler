@@ -26,7 +26,6 @@ To adjust any of the default configuration, please add one or more of the follow
     "Arguments": "--style=compressed",
     "GenerateScopedCss": true,
     "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"]
-    }
   }
 }
 ```
@@ -44,7 +43,16 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-I recommend adding the `#if DEBUG` statement to only use a watcher during debug mode.
+We recommend adding the `#if DEBUG` statement to only use a watcher during debug mode.
+
+**Note:** The Sass watcher is currently not supported inside of a docker container.
+This should only be an issue when you're developing inside of a docker container, as the compiler is automatically run during the MSBuild publish step.
+See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44) issue for the progress.
+
+## Publish
+
+This library also includes an MSBuild task that runs during the publish of your application. Because of this you don't need to include
+the Sass Watcher in your release builds and you can safely add the generated .css files to the .gitignore file as they are regenerated during publish. 
 
 ## Examples
 To provide you with examples, a configured version of a .NET 5.0 project and a configured .NET 6.0 Blazor app are added in the /Samples folder. Please see the link below for quick access
