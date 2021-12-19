@@ -45,9 +45,10 @@ public void ConfigureServices(IServiceCollection services)
 
 We recommend adding the `#if DEBUG` statement to only use a watcher during debug mode.
 
-**Note:** The Sass watcher is currently not supported inside of a docker container.
-This should only be an issue when you're developing inside of a docker container, as the compiler is automatically run during the MSBuild publish step.
-See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44) issue for the progress.
+**Note:** The Sass watcher is currently not supported inside of a docker container. This should
+only be an issue when you're developing inside of a docker container, running the published
+application in docker is supported as the compiler is automatically run during the MSBuild publish
+step. See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44) issue for the progress.
 
 ## Publish
 
