@@ -116,13 +116,16 @@ namespace AspNetCore.SassCompiler
                 return null;
 
             var directories = new List<string>();
-            directories.Add($"\"{rootFolder}/{_options.SourceFolder}\":\"{rootFolder}/{_options.TargetFolder}\"");
+            directories.Add($"\"{Path.Join(rootFolder, _options.SourceFolder)}\":\"{Path.Join(rootFolder, _options.TargetFolder)}\"");
             if (_options.GenerateScopedCss)
             {
                 foreach (var dir in _options.ScopedCssFolders)
                 {
-                    if (Directory.Exists($"{rootFolder}/{dir}"))
-                        directories.Add($"\"{rootFolder}/{dir}\":\"{rootFolder}/{dir}\"");
+                    if (dir == _options.SourceFolder)
+                        continue;
+
+                    if (Directory.Exists(Path.Join(rootFolder, dir)))
+                        directories.Add($"\"{Path.Join(rootFolder, dir)}\":\"{Path.Join(rootFolder, dir)}\"");
                 }
             }
 

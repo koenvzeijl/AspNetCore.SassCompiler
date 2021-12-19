@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using AspNetCore.SassCompiler;
 using AspNetCore.SassCompiler.BlazorSample.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddSassCompiler();
 
 var app = builder.Build();
 
