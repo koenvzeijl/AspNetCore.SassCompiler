@@ -52,7 +52,7 @@ jobs:
           mv dart-sass/* AspNetCore.SassCompiler/runtimes/osx-x64
           rm -rf dart-sass
 
-          unzip dart-sass-windows.zip
+          7z x -bb1 dart-sass-windows.zip
           mv dart-sass/* AspNetCore.SassCompiler/runtimes/win-x64
           rm -rf dart-sass
 
