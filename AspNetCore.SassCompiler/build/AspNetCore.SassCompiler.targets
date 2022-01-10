@@ -3,7 +3,7 @@
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
              AssemblyFile="$(SassCompilerAssembly)" />
 
-  <Target Name="Compile Sass" BeforeTargets="Build;ResolveScopedCssInputs">
+  <Target Name="Compile Sass" BeforeTargets="Build;ResolveScopedCssInputs;BundleMinify">
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
                  Command="$(SassCompilerBuildCommand)"
                  Snapshot="$(SassCompilerBuildSnapshot)">
