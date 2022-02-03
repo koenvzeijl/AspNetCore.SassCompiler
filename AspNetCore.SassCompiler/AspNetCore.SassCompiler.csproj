@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <PackageId>AspNetCore.SassCompiler</PackageId>
-    <Version>1.49.4</Version>
+    <Version>1.49.7</Version>
     <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
     <Description>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node</Description>
     <PackageDescription>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node, using dart-sass as a compiler</PackageDescription>
