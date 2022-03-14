@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCore.SassCompiler
+namespace AspNetCore.SassCompiler.Extensions
 {
     public static class ServiceCollectionExtensions
     {

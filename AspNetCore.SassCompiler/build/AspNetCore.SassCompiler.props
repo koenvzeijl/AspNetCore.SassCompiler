@@ -8,13 +8,16 @@
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
 
-    <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
-
+    <EnvironmentName>$(ASPNETCORE_ENVIRONMENT)</EnvironmentName>
+    
+    <SassCompilerProjectDir Condition="'$(SassCompilerProjectDir)' == ''">$(MSBuildProjectDirectory)</SassCompilerProjectDir>
     <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
-    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
+    
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == '' And '$(Configuration)' == 'DEBUG'">--error-css --style=expanded --no-source-map</SassCompilerArguments>
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == '' And '$(Configuration)' != 'DEBUG'">--error-css --style=compressed --no-source-map</SassCompilerArguments>
 
-    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
+    <SassCompilerAssembly Condition="'$(SassCompilerAssembly)' == ''">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
   </PropertyGroup>
 
   <ItemGroup>

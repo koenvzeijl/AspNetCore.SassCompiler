@@ -11,9 +11,17 @@ namespace AspNetCore.SassCompiler
 {
     public sealed class CompileSass : Task
     {
+        #region FIELDS
+
         private static readonly Regex _compiledFilesRe = new Regex(@"^Compiled (.+?) to (.+).$");
 
-        public string AppsettingsFile { get; set; }
+        #endregion FIELDS
+
+        #region PROPERTIES
+
+        public string ConfigLocation { get; set; }
+
+        public string Arguments { get; set; }
 
         public string Command { get; set; }
 
@@ -22,64 +30,27 @@ namespace AspNetCore.SassCompiler
         [Output]
         public ITaskItem[] GeneratedFiles { get; set; } = Array.Empty<ITaskItem>();
 
-        public override bool Execute()
-        {
-            var options = GetSassCompilerOptions();
+        #endregion PROPERTIES
 
-            var generatedFiles = new List<ITaskItem>();
+        #region METHODS
 
-            generatedFiles.AddRange(GenerateSourceTarget(options));
-            generatedFiles.AddRange(GenerateScopedCss(options));
-
-            GeneratedFiles = generatedFiles.ToArray();
-
-            return true;
-        }
-
-        private SassCompilerOptions GetSassCompilerOptions()
-        {
-            var options = new SassCompilerOptions();
-
-            if (File.Exists(AppsettingsFile))
-            {
-                var text = File.ReadAllText(AppsettingsFile);
-                var json = SimpleJson.SimpleJson.DeserializeObject(text);
-
-                if (json is IDictionary<string, object> root && root.TryGetValue("SassCompiler", out var value))
-                {
-                    if (value is IDictionary<string, object> sassCompiler)
-                    {
-                        if (sassCompiler.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
-                            options.SourceFolder = sourceFolder;
-                        if (sassCompiler.TryGetValue("TargetFolder", out value) && value is string targetFolder)
-                            options.TargetFolder = targetFolder;
-                        if (sassCompiler.TryGetValue("Arguments", out value) && value is string arguments)
-                            options.Arguments = arguments;
-                        if (sassCompiler.TryGetValue("GenerateScopedCss", out value) && value is bool generateScopedCss)
-                            options.GenerateScopedCss = generateScopedCss;
-                        if (sassCompiler.TryGetValue("ScopedCssFolders", out value) && value is IList<object> scopedCssFolders)
-                            options.ScopedCssFolders = scopedCssFolders.Where(x => x is string).Cast<string>().ToArray();
-                    }
-                }
-            }
-
-            return options;
-        }
+        #region Private methods
 
         private IEnumerable<ITaskItem> GenerateSourceTarget(SassCompilerOptions options)
         {
             if (Directory.Exists(options.SourceFolder))
             {
-                var compiler = new Process();
-                compiler.StartInfo = new ProcessStartInfo
+                var compilerStartInfo = new ProcessStartInfo
                 {
                     FileName = Command,
-                    Arguments = $"{Snapshot} {options.Arguments} {options.SourceFolder}:{options.TargetFolder} --update",
+                    Arguments = $"{Snapshot} {Arguments} {options.SourceFolder}:{options.TargetFolder} --update",
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };
+
+                var compiler = new Process() { StartInfo = compilerStartInfo };
 
                 compiler.Start();
                 compiler.WaitForExit();
@@ -104,35 +75,34 @@ namespace AspNetCore.SassCompiler
             }
             else if (options.SourceFolder != SassCompilerOptions.DefaultSourceFolder)
             {
-                Log.LogError($"Sass source folder {options.SourceFolder} does not exist");
+                Log.LogError($"Sass source folder {options.SourceFolder} does not exist.");
             }
         }
 
         private IEnumerable<ITaskItem> GenerateScopedCss(SassCompilerOptions options)
         {
-            if (!options.GenerateScopedCss)
+            if (options.GenerateScopedCss != true)
                 yield break;
 
-            var directories = new List<string>();
-            foreach (var dir in options.ScopedCssFolders)
-            {
-                if (Directory.Exists(dir))
-                    directories.Add(dir);
-            }
+            var directories = options.ScopedCssFolders
+                .Where(dir => Directory.Exists(dir))
+                .Select(dir => dir)
+                .ToArray();
 
-            if (directories.Count <= 0)
+            if (directories.Length == 0)
                 yield break;
 
-            var compiler = new Process();
-            compiler.StartInfo = new ProcessStartInfo
+            var compilerStartInfo = new ProcessStartInfo
             {
                 FileName = Command,
-                Arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update --no-source-map",
+                Arguments = $"{Snapshot} {Arguments} {string.Join(" ", directories)} --update --no-source-map",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+
+            var compiler = new Process { StartInfo = compilerStartInfo };
 
             compiler.Start();
             compiler.WaitForExit();
@@ -155,5 +125,30 @@ namespace AspNetCore.SassCompiler
                 yield return generatedFile;
             }
         }
+
+        #endregion Private methods
+
+        #region Public methods
+
+        public override bool Execute()
+        {
+            //Debugger.Launch();
+
+            SassCompilerOptions options = SassCompilerOptions.GetInstance(ConfigLocation);
+            Arguments = options.Arguments.ToLowerInvariant().Replace("--watch", string.Empty);
+
+            var generatedFiles = new List<ITaskItem>();
+
+            generatedFiles.AddRange(GenerateSourceTarget(options));
+            generatedFiles.AddRange(GenerateScopedCss(options));
+
+            GeneratedFiles = generatedFiles.ToArray();
+
+            return true;
+        }
+
+        #endregion Public methods
+
+        #endregion METHODS
     }
 }

@@ -1,5 +1,5 @@
-using AspNetCore.SassCompiler;
 using AspNetCore.SassCompiler.BlazorSample.Data;
+using AspNetCore.SassCompiler.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

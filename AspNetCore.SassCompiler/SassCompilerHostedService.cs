@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,22 +7,19 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using AspNetCore.SassCompiler.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCore.SassCompiler
 {
     internal sealed class SassCompilerHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<SassCompilerHostedService> _logger;
-        private readonly SassCompilerOptions _options;
-
         private Process _process;
 
-        public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
+        public SassCompilerHostedService(ILogger<SassCompilerHostedService> logger)
         {
-            _options = new SassCompilerOptions();
-            configuration.GetSection("SassCompiler").Bind(_options);
-
             _logger = logger;
         }
 
@@ -57,6 +52,7 @@ namespace AspNetCore.SassCompiler
             if (_process != null)
             {
                 _process.CloseMainWindow();
+
                 if (!_process.HasExited)
                     _process.Kill();
 
@@ -68,11 +64,14 @@ namespace AspNetCore.SassCompiler
         private void StartProcess()
         {
             _process = GetSassProcess();
+
             if (_process == null)
             {
                 _logger.LogError("sass command not found, not watching for changes.");
                 return;
             }
+
+            _process.KillAllByName();
 
             _process.EnableRaisingEvents = true;
 
@@ -109,6 +108,7 @@ namespace AspNetCore.SassCompiler
 
         private Process GetSassProcess()
         {
+            var options = SassCompilerOptions.GetInstance();
             var rootFolder = Directory.GetCurrentDirectory();
 
             var command = GetSassCommand();
@@ -116,30 +116,32 @@ namespace AspNetCore.SassCompiler
                 return null;
 
             var directories = new List<string>();
-            directories.Add($"\"{Path.Join(rootFolder, _options.SourceFolder)}\":\"{Path.Join(rootFolder, _options.TargetFolder)}\"");
-            if (_options.GenerateScopedCss)
+            directories.Add($"\"{Path.Combine(rootFolder, options.SourceFolder)}\":\"{Path.Combine(rootFolder, options.TargetFolder)}\"");
+            if (options.GenerateScopedCss == true)
             {
-                foreach (var dir in _options.ScopedCssFolders)
+                foreach (var dir in options.ScopedCssFolders)
                 {
-                    if (dir == _options.SourceFolder)
+                    if (dir == options.SourceFolder)
                         continue;
 
-                    if (Directory.Exists(Path.Join(rootFolder, dir)))
-                        directories.Add($"\"{Path.Join(rootFolder, dir)}\":\"{Path.Join(rootFolder, dir)}\"");
+                    if (Directory.Exists(Path.Combine(rootFolder, dir)))
+                        directories.Add($"\"{Path.Combine(rootFolder, dir)}\":\"{Path.Combine(rootFolder, dir)}\"");
                 }
             }
 
-            var process = new Process();
-            process.StartInfo.FileName = command.Filename;
-            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_options.Arguments} {string.Join(" ", directories)}";
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+            var startInfo = new ProcessStartInfo()
+            {
+                FileName = command.Filename,
+                Arguments = $"{command.Snapshot} --error-css --watch {options.Arguments} {string.Join(" ", directories)}",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = Directory.GetCurrentDirectory()
+            };
 
-            return process;
+            return new Process() { StartInfo = startInfo };
         }
 
         private static (string Filename, string Snapshot) GetSassCommand()
@@ -149,7 +151,7 @@ namespace AspNetCore.SassCompiler
             if (attribute != null)
                 return (attribute.SassBinary, attribute.SassSnapshot);
 
-            var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
+            var assemblyLocation = typeof(SassCompilerHostedService).Assembly.Location;
 
             string exePath, snapshotPath;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -173,8 +175,8 @@ namespace AspNetCore.SassCompiler
             var directory = Path.GetDirectoryName(assemblyLocation);
             while (!string.IsNullOrEmpty(directory) && directory != "/")
             {
-                if (File.Exists(Path.Join(directory, exePath)))
-                    return (Path.Join(directory, exePath), snapshotPath == null ? null : "\"" + Path.Join(directory, snapshotPath) + "\"");
+                if (File.Exists(Path.Combine(directory, exePath)))
+                    return (Path.Combine(directory, exePath), snapshotPath == null ? null : "\"" + Path.Combine(directory, snapshotPath) + "\"");
 
                 directory = Path.GetDirectoryName(directory);
             }

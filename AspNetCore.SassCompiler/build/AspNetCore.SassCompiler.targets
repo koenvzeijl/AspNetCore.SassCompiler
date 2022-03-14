@@ -4,7 +4,8 @@
              AssemblyFile="$(SassCompilerAssembly)" />
 
   <Target Name="Compile Sass" BeforeTargets="Build;ResolveScopedCssInputs;BundleMinify">
-    <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
+    <CompileSass ConfigLocation="$(SassCompilerProjectDir)"
+                 Arguments="$(SassCompilerArguments)"
                  Command="$(SassCompilerBuildCommand)"
                  Snapshot="$(SassCompilerBuildSnapshot)">
       <Output TaskParameter="GeneratedFiles"

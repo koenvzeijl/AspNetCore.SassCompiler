@@ -260,3 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 /Samples/AspNetCore.SassCompiler.Sample/wwwroot/css
+/Samples/AspNetCore.SassCompiler.Sample31/wwwroot/css/site_sass.css
+/Samples/AspNetCore.SassCompiler.BlazorSample/wwwroot/css/styles.css
+

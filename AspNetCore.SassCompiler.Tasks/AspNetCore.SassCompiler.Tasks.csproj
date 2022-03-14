@@ -1,16 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;NU5128</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;NU5128</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.4.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.4.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Include="..\AspNetCore.SassCompiler\SassCompilerOptions.cs" />
-  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="(if exist &quot;$(TargetDir)*old.pdb&quot; del &quot;$(TargetDir)*old.pdb&quot;) &amp; (if exist &quot;$(TargetDir)*.pdb&quot; ren &quot;$(TargetDir)*.pdb&quot; *.old.pdb) &amp; (if exist &quot;$(TargetDir)*old.dll&quot; del &quot;$(TargetDir)*old.dll&quot;) &amp; (if exist &quot;$(TargetDir)*.dll&quot; ren &quot;$(TargetDir)*.dll&quot; *.old.dll) &amp; (if exist &quot;$(TargetDir)*old.exe&quot; del &quot;$(TargetDir)*old.exe&quot;) &amp; (if exist &quot;$(TargetDir)*.exe&quot; ren &quot;$(TargetDir)*.exe&quot; *.old.exe)" />
+  </Target>
 
 </Project>
