@@ -15,6 +15,8 @@ namespace AspNetCore.SassCompiler
 
         public string AppsettingsFile { get; set; }
 
+        public string SassCompilerFile { get; set; }
+
         public string Command { get; set; }
 
         public string Snapshot { get; set; }
@@ -40,27 +42,47 @@ namespace AspNetCore.SassCompiler
         {
             var options = new SassCompilerOptions();
 
-            if (File.Exists(AppsettingsFile))
+            var sassCompiler = (IDictionary<string, object>)null;
+
+            if (File.Exists(SassCompilerFile))
+            {
+                var text = File.ReadAllText(SassCompilerFile);
+                var json = SimpleJson.SimpleJson.DeserializeObject(text);
+                if (json is IDictionary<string, object> dict)
+                    sassCompiler = dict;
+            }
+            else if (File.Exists(AppsettingsFile))
             {
                 var text = File.ReadAllText(AppsettingsFile);
                 var json = SimpleJson.SimpleJson.DeserializeObject(text);
 
-                if (json is IDictionary<string, object> root && root.TryGetValue("SassCompiler", out var value))
+                if (json is IDictionary<string, object> root
+                    && root.TryGetValue("SassCompiler", out var section)
+                    && section is IDictionary<string, object> dict)
                 {
-                    if (value is IDictionary<string, object> sassCompiler)
-                    {
-                        if (sassCompiler.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
-                            options.SourceFolder = sourceFolder;
-                        if (sassCompiler.TryGetValue("TargetFolder", out value) && value is string targetFolder)
-                            options.TargetFolder = targetFolder;
-                        if (sassCompiler.TryGetValue("Arguments", out value) && value is string arguments)
-                            options.Arguments = arguments;
-                        if (sassCompiler.TryGetValue("GenerateScopedCss", out value) && value is bool generateScopedCss)
-                            options.GenerateScopedCss = generateScopedCss;
-                        if (sassCompiler.TryGetValue("ScopedCssFolders", out value) && value is IList<object> scopedCssFolders)
-                            options.ScopedCssFolders = scopedCssFolders.Where(x => x is string).Cast<string>().ToArray();
-                    }
+                    sassCompiler = dict;
                 }
+            }
+
+            if (sassCompiler != null)
+            {
+                object value;
+                if (sassCompiler.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
+                    options.SourceFolder = sourceFolder;
+                if (sassCompiler.TryGetValue("TargetFolder", out value) && value is string targetFolder)
+                    options.TargetFolder = targetFolder;
+                if (sassCompiler.TryGetValue("Arguments", out value) && value is string arguments)
+                    options.Arguments = arguments;
+                if (sassCompiler.TryGetValue("GenerateScopedCss", out value) && value is bool generateScopedCss)
+                    options.GenerateScopedCss = generateScopedCss;
+                if (sassCompiler.TryGetValue("ScopedCssFolders", out value) && value is IList<object> scopedCssFolders)
+                    options.ScopedCssFolders = scopedCssFolders.Where(x => x is string).Cast<string>().ToArray();
+            }
+
+            if (options.Arguments.Contains("--watch"))
+            {
+                Log.LogWarning("Cannot use --watch as sass argument when running in MSBuild, use the .AddSassCompiler() method on the IServiceCollection instead.");
+                options.Arguments = options.Arguments.Replace("--watch", "");
             }
 
             return options;
@@ -87,7 +109,7 @@ namespace AspNetCore.SassCompiler
                 if (compiler.ExitCode != 0)
                 {
                     var error = compiler.StandardError.ReadToEnd();
-                    Log.LogError($"Error running sass compiler: {error}");
+                    Log.LogError($"Error running sass compiler: {error}.");
                     yield break;
                 }
 
@@ -104,7 +126,7 @@ namespace AspNetCore.SassCompiler
             }
             else if (options.SourceFolder != SassCompilerOptions.DefaultSourceFolder)
             {
-                Log.LogError($"Sass source folder {options.SourceFolder} does not exist");
+                Log.LogError($"Sass source folder {options.SourceFolder} does not exist.");
             }
         }
 
@@ -120,14 +142,14 @@ namespace AspNetCore.SassCompiler
                     directories.Add(dir);
             }
 
-            if (directories.Count <= 0)
+            if (directories.Count == 0)
                 yield break;
 
             var compiler = new Process();
             compiler.StartInfo = new ProcessStartInfo
             {
                 FileName = Command,
-                Arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update --no-source-map",
+                Arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -140,7 +162,7 @@ namespace AspNetCore.SassCompiler
             if (compiler.ExitCode != 0)
             {
                 var error = compiler.StandardError.ReadToEnd();
-                Log.LogError($"Error running sass compiler: {error}");
+                Log.LogError($"Error running sass compiler: {error}.");
                 yield break;
             }
 

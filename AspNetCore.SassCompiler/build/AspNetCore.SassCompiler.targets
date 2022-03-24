@@ -1,10 +1,11 @@
 ﻿<Project>
 
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
-             AssemblyFile="$(SassCompilerAssembly)" />
+             AssemblyFile="$(SassCompilerTasksAssembly)" />
 
   <Target Name="Compile Sass" BeforeTargets="Build;ResolveScopedCssInputs;BundleMinify">
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
+                 SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"
                  Snapshot="$(SassCompilerBuildSnapshot)">
       <Output TaskParameter="GeneratedFiles"

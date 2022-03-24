@@ -18,7 +18,7 @@ namespace AspNetCore.SassCompiler
             set => _targetFolder = value?.Replace('\\', '/');
         }
 
-        public string Arguments { get; set; } = "--style=compressed --error-css";
+        public string Arguments { get; set; } = "--style=compressed --error-css --no-source-map";
 
         public bool GenerateScopedCss { get; set; } = true;
 

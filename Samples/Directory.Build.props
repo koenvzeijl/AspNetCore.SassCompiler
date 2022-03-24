@@ -1,8 +1,8 @@
 <Project TreatAsLocalProperty="_SassCompilerTFM">
 
   <PropertyGroup>
-    <SassCompilerAssembly Condition=" '$(Configuration)' != '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\$(Configuration)\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
-    <SassCompilerAssembly Condition=" '$(Configuration)' == '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\Debug\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
+    <SassCompilerTasksAssembly Condition=" '$(Configuration)' != '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\$(Configuration)\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
+    <SassCompilerTasksAssembly Condition=" '$(Configuration)' == '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\Debug\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
   </PropertyGroup>
 
 </Project>

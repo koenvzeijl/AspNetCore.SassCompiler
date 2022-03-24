@@ -1,0 +1,7 @@
+{
+  "Arguments": "--error-css --style=expanded",
+  "SourceFolder": "Styles",
+  "TargetFolder": "wwwroot/css",
+  "GenerateScopedCss": true,
+  "ScopedCssFolders": ["Shared", "Pages"]
+}
