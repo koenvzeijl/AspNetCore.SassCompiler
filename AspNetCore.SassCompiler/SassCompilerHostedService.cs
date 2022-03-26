@@ -188,7 +188,7 @@ namespace AspNetCore.SassCompiler
             var attribute = Assembly.GetEntryAssembly()?.GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
 
             if (attribute != null)
-                return (attribute.SassBinary, attribute.SassSnapshot);
+                return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
 
             var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
 

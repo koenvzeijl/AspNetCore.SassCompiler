@@ -19,7 +19,12 @@ namespace AspNetCore.SassCompiler
 
         public string Command { get; set; }
 
-        public string Snapshot { get; set; }
+        private string _snapshot;
+        public string Snapshot
+        {
+            get => _snapshot;
+            set => _snapshot = string.IsNullOrWhiteSpace(value) ? "" : $"\"{value}\"";
+        }
 
         public string Configuration { get; set; }
 

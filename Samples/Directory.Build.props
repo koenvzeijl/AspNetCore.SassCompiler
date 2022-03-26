@@ -1,4 +1,4 @@
-<Project TreatAsLocalProperty="_SassCompilerTFM">
+<Project>
 
   <PropertyGroup>
     <SassCompilerTasksAssembly Condition=" '$(Configuration)' != '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\$(Configuration)\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>

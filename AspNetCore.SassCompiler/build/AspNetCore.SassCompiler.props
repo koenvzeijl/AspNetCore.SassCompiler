@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
-    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Linux'))"> </SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
-    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
 
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
     <SassCompilerSassCompilerJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)sasscompiler.json</SassCompilerSassCompilerJson>
