@@ -1,7 +1,13 @@
 {
-  "Arguments": "--error-css --style=expanded",
+  "Arguments": "--error-css --style=expanded --source-map",
   "SourceFolder": "Styles",
   "TargetFolder": "wwwroot/css",
   "GenerateScopedCss": true,
-  "ScopedCssFolders": ["Shared", "Pages"]
+  "ScopedCssFolders": ["Shared", "Pages"],
+
+  "Configurations": {
+    "Release": {
+      "Arguments": "--no-error-css --style=compressed --no-source-map"
+    }
+  }
 }

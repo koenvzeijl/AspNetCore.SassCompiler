@@ -1,0 +1,11 @@
+{
+  "SourceFolder": "Styles",
+  "TargetFolder": "wwwroot\\css",
+  "Arguments": "--style=compressed",
+
+  "Configurations": {
+    "Debug": {
+      "Arguments": "--style=expanded"
+    }
+  }
+}

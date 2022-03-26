@@ -53,6 +53,12 @@ namespace AspNetCore.SassCompiler
             if (options.Arguments.Contains("--watch"))
                 options.Arguments = options.Arguments.Replace("--watch", "");
 
+            if (!options.Arguments.Contains("--style"))
+                options.Arguments = $"--style=expanded {options.Arguments}";
+
+            if (!options.Arguments.Contains("--source-map") && !options.Arguments.Contains("--no-source-map"))
+                options.Arguments = $"--source-map {options.Arguments}";
+
             return options;
         }
 
@@ -82,6 +88,8 @@ namespace AspNetCore.SassCompiler
 
         public void Dispose()
         {
+            _isStopping = true;
+
             if (_process != null)
             {
                 _process.CloseMainWindow();
@@ -120,6 +128,8 @@ namespace AspNetCore.SassCompiler
             _process.Start();
             _process.BeginOutputReadLine();
             _process.BeginErrorReadLine();
+
+            ChildProcessTracker.AddProcess(_process);
 
             _logger.LogInformation("Started Sass watch");
         }

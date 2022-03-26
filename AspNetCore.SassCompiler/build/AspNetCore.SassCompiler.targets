@@ -7,7 +7,8 @@
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
                  SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"
-                 Snapshot="$(SassCompilerBuildSnapshot)">
+                 Snapshot="$(SassCompilerBuildSnapshot)"
+                 Configuration="$(SassCompilerConfiguration)">
       <Output TaskParameter="GeneratedFiles"
               ItemName="CompiledCssFiles" />
     </CompileSass>

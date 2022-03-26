@@ -19,6 +19,8 @@
 
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(RuntimeIdentifier)' == 'browser-wasm'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
+
+    <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
@@ -34,7 +36,7 @@
     <None Include="$(SassCompilerBuildCommand)" Link="runtimes\linux-x64\sass" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildCommand)" Link="runtimes\osx-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\osx-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="sasscompiler.json" Visible="false" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <Content Update="sasscompiler.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
 </Project>
