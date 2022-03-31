@@ -7,10 +7,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimmerDefaultAction>link</TrimmerDefaultAction>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" />
+
+    <TrimmerRootAssembly Include="AspNetCore.SassCompiler" />
   </ItemGroup>
 
   <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->

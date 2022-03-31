@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCore.SassCompiler
 {
@@ -19,16 +20,47 @@ namespace AspNetCore.SassCompiler
         private readonly SassCompilerOptions _options;
 
         private Process _process;
+        private bool _isStopping = false;
 
         public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
         {
-            _options = new SassCompilerOptions();
-            configuration.GetSection("SassCompiler").Bind(_options);
-
+            _options = CreateSassCompilerOptions(configuration);
             _logger = logger;
         }
 
         ~SassCompilerHostedService() => Dispose();
+
+        private static SassCompilerOptions CreateSassCompilerOptions(IConfiguration configuration)
+        {
+            SassCompilerOptions options;
+
+            if (File.Exists(Path.Join(Environment.CurrentDirectory, "sasscompiler.json")))
+            {
+                var contents = File.ReadAllText(Path.Join(Environment.CurrentDirectory, "sasscompiler.json"));
+                options = JsonSerializer.Deserialize<SassCompilerOptions>(contents, new JsonSerializerOptions
+                {
+                    AllowTrailingCommas = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    PropertyNameCaseInsensitive = true,
+                });
+            }
+            else
+            {
+                options = new SassCompilerOptions();
+                configuration.GetSection("SassCompiler").Bind(options);
+            }
+
+            if (options.Arguments.Contains("--watch"))
+                options.Arguments = options.Arguments.Replace("--watch", "");
+
+            if (!options.Arguments.Contains("--style"))
+                options.Arguments = $"--style=expanded {options.Arguments}";
+
+            if (!options.Arguments.Contains("--source-map") && !options.Arguments.Contains("--no-source-map"))
+                options.Arguments = $"--source-map {options.Arguments}";
+
+            return options;
+        }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -39,6 +71,8 @@ namespace AspNetCore.SassCompiler
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            _isStopping = true;
+
             if (_process != null)
             {
                 _process.CloseMainWindow();
@@ -54,6 +88,8 @@ namespace AspNetCore.SassCompiler
 
         public void Dispose()
         {
+            _isStopping = true;
+
             if (_process != null)
             {
                 _process.CloseMainWindow();
@@ -93,6 +129,8 @@ namespace AspNetCore.SassCompiler
             _process.BeginOutputReadLine();
             _process.BeginErrorReadLine();
 
+            ChildProcessTracker.AddProcess(_process);
+
             _logger.LogInformation("Started Sass watch");
         }
 
@@ -101,10 +139,13 @@ namespace AspNetCore.SassCompiler
             _process.Dispose();
             _process = null;
 
-            _logger.LogWarning("Sass compiler exited, restarting in 1 second.");
+            if (!_isStopping)
+            {
+                _logger.LogWarning("Sass compiler exited, restarting in 1 second.");
 
-            await Task.Delay(1000);
-            StartProcess();
+                await Task.Delay(1000);
+                StartProcess();
+            }
         }
 
         private Process GetSassProcess()
@@ -144,10 +185,10 @@ namespace AspNetCore.SassCompiler
 
         private static (string Filename, string Snapshot) GetSassCommand()
         {
-            var attribute = Assembly.GetEntryAssembly().GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
+            var attribute = Assembly.GetEntryAssembly()?.GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
 
             if (attribute != null)
-                return (attribute.SassBinary, attribute.SassSnapshot);
+                return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
 
             var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
 

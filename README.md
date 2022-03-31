@@ -16,8 +16,9 @@ dotnet add package AspNetCore.SassCompiler
 
 ## Configuration
 After adding the package, the Sass styles from the SourceFolder (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
-You can also adjust the default (`--style=compressed`) dart-sass Arguments in the appsettings.json. Scoped CSS is also supported for applications that use blazor for example. This feature is enabled by default and will use the default scoped CSS folders as shown below. To disable this feature, change GenerateScopedCss to false.
-To adjust any of the default configuration, please add one or more of the following settings to the appsettings.json:
+You can also adjust the default (`--style=compressed --error-css --no-source-map`) dart-sass Arguments in the appsettings.json or sasscompiler.json. Scoped CSS is also supported for applications that use blazor for example.
+This feature is enabled by default and will use the default scoped CSS folders as shown below. To disable this feature, change GenerateScopedCss to false.
+To adjust any of the default configuration, please add one or more of the following settings to the appsettings.json or sasscompiler.json (when using sasscompiler.json the configuration should not be nested under the key `SassCompiler` but added directly on the root object):
 ```json
 {
   "SassCompiler": {
@@ -25,7 +26,14 @@ To adjust any of the default configuration, please add one or more of the follow
     "TargetFolder": "wwwroot/css",
     "Arguments": "--style=compressed",
     "GenerateScopedCss": true,
-    "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"]
+    "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
+    
+    // You can override specific options based on the build configuration
+    "Configurations": {
+      "Debug": { // These options apply only to Debug builds
+        "Arguments": "--style=expanded"
+      }
+    }
   }
 }
 ```
@@ -49,6 +57,10 @@ We recommend adding the `#if DEBUG` statement to only use a watcher during debug
 only be an issue when you're developing inside of a docker container, running the published
 application in docker is supported as the compiler is automatically run during the MSBuild publish
 step. See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44) issue for the progress.
+
+## Blazor WASM
+If you use this with Blazor WebAssembly and want to customize the settings you need to use the sasscompiler.json, using appsettings.json is not supported.
+The sass watcher is not supported for Blazor WebAssembly projects, the MSBuild task is still available and will compile your scss during build and publish.
 
 ## Publish
 

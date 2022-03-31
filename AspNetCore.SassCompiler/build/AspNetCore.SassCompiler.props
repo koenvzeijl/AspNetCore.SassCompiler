@@ -1,27 +1,42 @@
-﻿<Project TreatAsLocalProperty="_SassCompilerTFM">
+﻿<Project>
 
   <PropertyGroup>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
-    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Linux'))"> </SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
-    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">&quot;$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot&quot;</SassCompilerBuildSnapshot>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
 
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
+    <SassCompilerSassCompilerJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)sasscompiler.json</SassCompilerSassCompilerJson>
 
     <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
     <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
-    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css</SassCompilerArguments>
+    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css --no-source-map</SassCompilerArguments>
 
-    <SassCompilerAssembly Condition=" '$(SassCompilerAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerAssembly>
+    <SassCompilerTasksAssembly Condition=" '$(SassCompilerTasksAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
+
+    <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(RuntimeIdentifier)' == 'browser-wasm'">false</SassCompilerEnableWatcher>
+    <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
+
+    <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
     <AssemblyAttribute Include="AspNetCore.SassCompiler.SassCompilerAttribute">
       <_Parameter1>$(SassCompilerBuildCommand)</_Parameter1>
       <_Parameter2>$(SassCompilerBuildSnapshot)</_Parameter2>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
+    <None Include="$(SassCompilerBuildCommand)" Link="runtimes\win-x64\src\dart.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\win-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildCommand)" Link="runtimes\linux-x64\sass" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildCommand)" Link="runtimes\osx-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\osx-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <Content Update="sasscompiler.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
 </Project>
