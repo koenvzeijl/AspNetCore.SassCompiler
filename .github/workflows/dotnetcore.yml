@@ -48,7 +48,7 @@ jobs:
         dotnet-version: 6.0.x
     - name: Publish NuGet
       id: publish_nuget
-      uses: brandedoutcast/publish-nuget@v2.5.5
+      uses: alirezanet/publish-nuget@v3.0.3
       with:
         PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.SassCompiler.csproj
         PACKAGE_NAME: AspNetCore.SassCompiler
