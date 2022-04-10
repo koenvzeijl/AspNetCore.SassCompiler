@@ -1,0 +1,7 @@
+$border: 2px dashed red;
+
+.my-component {
+    border: $border;
+    padding: 1em;
+    margin: 1em 0;
+}

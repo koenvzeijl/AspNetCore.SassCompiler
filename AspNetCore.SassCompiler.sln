@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.Sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.BlazorWasmSample", "Samples\AspNetCore.SassCompiler.BlazorWasmSample\AspNetCore.SassCompiler.BlazorWasmSample.csproj", "{FE213E40-A6F6-47A2-B477-89CA8B2AB54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.SassCompiler.RazorClassLibrary", "Samples\AspNetCore.SassCompiler.RazorClassLibrary\AspNetCore.SassCompiler.RazorClassLibrary.csproj", "{B318D98D-B145-4ACF-8B48-D601FB5C91E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{FE213E40-A6F6-47A2-B477-89CA8B2AB54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE213E40-A6F6-47A2-B477-89CA8B2AB54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE213E40-A6F6-47A2-B477-89CA8B2AB54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B318D98D-B145-4ACF-8B48-D601FB5C91E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B318D98D-B145-4ACF-8B48-D601FB5C91E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B318D98D-B145-4ACF-8B48-D601FB5C91E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B318D98D-B145-4ACF-8B48-D601FB5C91E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,5 +68,6 @@ Global
 		{71BB1B42-AE01-43FB-9BCE-00B83745780B} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
 		{9D76B3AF-E3B8-40EF-BBCE-2A0A5330A4CD} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
 		{FE213E40-A6F6-47A2-B477-89CA8B2AB54D} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
+		{B318D98D-B145-4ACF-8B48-D601FB5C91E4} = {737BF497-41CA-48B1-8958-6FC3D5A6A2C6}
 	EndGlobalSection
 EndGlobal

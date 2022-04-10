@@ -1,5 +1,6 @@
 Samples/*/wwwroot/css/site_sass.css
 Samples/*/wwwroot/css/site_sass.css.map
+Samples/**/*.razor.css
 Samples/**/*.css.map
 
 
