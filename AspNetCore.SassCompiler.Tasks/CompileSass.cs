@@ -57,7 +57,7 @@ namespace AspNetCore.SassCompiler
 
                 if (configuration.TryGetValue("Configurations", out var value) && value is IDictionary<string, object> configOverrides)
                 {
-                    if (configOverrides.TryGetValue(Configuration, out value) && value is IDictionary<string, object> overrides)
+                    if (!string.IsNullOrEmpty(Configuration) && configOverrides.TryGetValue(Configuration, out value) && value is IDictionary<string, object> overrides)
                     {
                         BindConfiguration(options, overrides);
                     }

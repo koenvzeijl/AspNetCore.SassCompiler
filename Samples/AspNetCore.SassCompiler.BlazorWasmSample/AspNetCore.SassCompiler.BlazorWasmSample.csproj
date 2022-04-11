@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.SassCompiler.RazorClassLibrary\AspNetCore.SassCompiler.RazorClassLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" />
   </ItemGroup>
 
