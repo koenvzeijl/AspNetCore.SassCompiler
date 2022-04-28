@@ -143,16 +143,18 @@ namespace AspNetCore.SassCompiler
                 };
 
                 compiler.Start();
+                
+                var error = compiler.StandardError.ReadToEnd();
+                var output = compiler.StandardOutput.ReadToEnd();
+                
                 compiler.WaitForExit();
 
                 if (compiler.ExitCode != 0)
                 {
-                    var error = compiler.StandardError.ReadToEnd();
                     Log.LogError($"Error running sass compiler: {error}.");
                     yield break;
                 }
 
-                var output = compiler.StandardOutput.ReadToEnd();
                 var matches = _compiledFilesRe.Matches(output);
 
                 foreach (Match match in matches)
@@ -196,16 +198,18 @@ namespace AspNetCore.SassCompiler
             };
 
             compiler.Start();
+
+            var output = compiler.StandardOutput.ReadToEnd();
+            var error = compiler.StandardError.ReadToEnd();
+            
             compiler.WaitForExit();
 
             if (compiler.ExitCode != 0)
             {
-                var error = compiler.StandardError.ReadToEnd();
                 Log.LogError($"Error running sass compiler: {error}.");
                 yield break;
             }
 
-            var output = compiler.StandardOutput.ReadToEnd();
             var matches = _compiledFilesRe.Matches(output);
 
             foreach (Match match in matches)
