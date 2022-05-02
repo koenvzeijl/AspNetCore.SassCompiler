@@ -210,7 +210,7 @@ namespace AspNetCore.SassCompiler
             string error = null;
             compiler.ErrorDataReceived += (sender, e) =>
             {
-                error += e.Data;
+                error += e.Data + "\r\n";
             };
             
             compiler.Start();
