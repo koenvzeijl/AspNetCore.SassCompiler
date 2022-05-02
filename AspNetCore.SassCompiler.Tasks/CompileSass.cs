@@ -131,25 +131,12 @@ namespace AspNetCore.SassCompiler
         {
             if (Directory.Exists(options.SourceFolder))
             {
-                var compiler = new Process();
-                compiler.StartInfo = new ProcessStartInfo
-                {
-                    FileName = Command,
-                    Arguments = $"{Snapshot} {options.Arguments} {options.SourceFolder}:{options.TargetFolder} --update",
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                };
+                var arguments =
+                    $"{Snapshot} {options.Arguments} {options.SourceFolder}:{options.TargetFolder} --update";
+            
+                var (success, output, error) = GenerateCss(arguments);
 
-                compiler.Start();
-                
-                var error = compiler.StandardError.ReadToEnd();
-                var output = compiler.StandardOutput.ReadToEnd();
-                
-                compiler.WaitForExit();
-
-                if (compiler.ExitCode != 0)
+                if (!success)
                 {
                     Log.LogError($"Error running sass compiler: {error}.");
                     yield break;
@@ -186,25 +173,11 @@ namespace AspNetCore.SassCompiler
             if (directories.Count == 0)
                 yield break;
 
-            var compiler = new Process();
-            compiler.StartInfo = new ProcessStartInfo
-            {
-                FileName = Command,
-                Arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-            };
-
-            compiler.Start();
-
-            var output = compiler.StandardOutput.ReadToEnd();
-            var error = compiler.StandardError.ReadToEnd();
+            var arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update";
             
-            compiler.WaitForExit();
+            var (success, output, error) = GenerateCss(arguments);
 
-            if (compiler.ExitCode != 0)
+            if (!success)
             {
                 Log.LogError($"Error running sass compiler: {error}.");
                 yield break;
@@ -219,6 +192,31 @@ namespace AspNetCore.SassCompiler
                 var generatedFile = new TaskItem(cssFile);
                 yield return generatedFile;
             }
+        }
+
+        private (bool Success, string Output, string Error) GenerateCss(string arguments)
+        {
+            var compiler = new Process();
+            compiler.StartInfo = new ProcessStartInfo
+            {
+                FileName = Command,
+                Arguments = arguments,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+
+            compiler.Start();
+
+            var output = compiler.StandardOutput.ReadToEnd();
+            var error = compiler.StandardError.ReadToEnd();
+
+            compiler.WaitForExit();
+
+            var success = compiler.ExitCode == 0;
+
+            return (success, output, error);
         }
     }
 }
