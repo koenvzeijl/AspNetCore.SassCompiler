@@ -207,10 +207,17 @@ namespace AspNetCore.SassCompiler
                 RedirectStandardError = true,
             };
 
+            string error = null;
+            compiler.ErrorDataReceived += (sender, e) =>
+            {
+                error += e.Data;
+            };
+            
             compiler.Start();
 
+            compiler.BeginErrorReadLine();
+            
             var output = compiler.StandardOutput.ReadToEnd();
-            var error = compiler.StandardError.ReadToEnd();
 
             compiler.WaitForExit();
 
