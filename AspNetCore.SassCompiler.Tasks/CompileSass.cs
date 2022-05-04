@@ -142,6 +142,11 @@ namespace AspNetCore.SassCompiler
                     yield break;
                 }
 
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    Log.LogWarning(error);
+                }
+
                 var matches = _compiledFilesRe.Matches(output);
 
                 foreach (Match match in matches)
@@ -183,6 +188,11 @@ namespace AspNetCore.SassCompiler
                 yield break;
             }
 
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                Log.LogWarning(error);
+            }
+            
             var matches = _compiledFilesRe.Matches(output);
 
             foreach (Match match in matches)
