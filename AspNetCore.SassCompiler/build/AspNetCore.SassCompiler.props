@@ -19,7 +19,6 @@
 
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(RuntimeIdentifier)' == 'browser-wasm'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
-    <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(OutputType)' != 'Exe'">false</SassCompilerEnableWatcher>
 
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">Debug</SassCompilerConfiguration>
