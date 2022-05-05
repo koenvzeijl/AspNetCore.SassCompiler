@@ -932,7 +932,22 @@ namespace SimpleJson
             {
                 index += 2;
                 for (; index < json.Length; index++)
-                    if ("\n\r".IndexOf(json[index]) == -1) break;
+                    if (json[index] == '\n' || json[index] == '\r') break;
+
+                EatWhitespace(json, ref index);
+            }
+
+            if (index < json.Length - 1 && json[index] == '/' && json[index + 1] == '*')
+            {
+                index += 3;  // Add 3 instead of 2 because we expect the '*' at `index - 1`
+                for (; index < json.Length; index++)
+                {
+                    if (json[index] == '/' && json[index - 1] == '*')
+                    {
+                        index++;
+                        break;
+                    }
+                }
 
                 EatWhitespace(json, ref index);
             }
