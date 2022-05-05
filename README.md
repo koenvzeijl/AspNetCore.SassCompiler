@@ -16,9 +16,23 @@ dotnet add package AspNetCore.SassCompiler
 
 ## Configuration
 After adding the package, the Sass styles from the SourceFolder (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
-You can also adjust the default (`--style=compressed --error-css --no-source-map`) dart-sass Arguments in the appsettings.json or sasscompiler.json. Scoped CSS is also supported for applications that use blazor for example.
-This feature is enabled by default and will use the default scoped CSS folders as shown below. To disable this feature, change GenerateScopedCss to false.
-To adjust any of the default configuration, please add one or more of the following settings to the appsettings.json or sasscompiler.json (when using sasscompiler.json the configuration should not be nested under the key `SassCompiler` but added directly on the root object):
+You can also adjust the default configuration in the appsettings.json or sasscompiler.json, do note that when using `appsettings.json` the configuration needs to be nested under a "SassCompiler" property, but when you're using `sasscompiler.json` the settings should _not_ be nested.
+
+### Available options
+
+| Name              | Default value                              | Description                                                    |
+|-------------------|--------------------------------------------|----------------------------------------------------------------|
+| SourceFolder      | "Styles"                                   | The folder where all the .scss files reside                    |
+| TargetFolder      | "wwwroot/css"                              | The folder to output the generated .css files to               |
+| Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable                   |
+| GenerateScopedCss | true                                       | Enable/disable support for scoped scss                         |
+| ScopedCssFolders  | ["Views", "Pages", "Shared", "Components"] | The folders in which .scss files are considered for scoped css |
+
+### Examples
+
+<details open>
+<summary>appsettings.json</summary>
+
 ```json
 {
   "SassCompiler": {
@@ -37,6 +51,29 @@ To adjust any of the default configuration, please add one or more of the follow
   }
 }
 ```
+</details>
+
+<details>
+<summary>sasscompiler.json</summary>
+
+```json
+{
+  "SourceFolder": "Styles",
+  "TargetFolder": "wwwroot/css",
+  "Arguments": "--style=compressed",
+  "GenerateScopedCss": true,
+  "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
+
+  // You can override specific options based on the build configuration
+  "Configurations": {
+    "Debug": { // These options apply only to Debug builds
+      "Arguments": "--style=expanded"
+    }
+  }
+}
+```
+</details>
+
 
 ## Sass watcher
 To use the Sass watcher in your project, you must add the following code to your startup.cs:
@@ -60,7 +97,7 @@ step. See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44
 
 ## Blazor WASM
 If you use this with Blazor WebAssembly and want to customize the settings you need to use the sasscompiler.json, using appsettings.json is not supported.
-The sass watcher is not supported for Blazor WebAssembly projects, the MSBuild task is still available and will compile your scss during build and publish.
+**The sass watcher is currently not supported for Blazor WebAssembly projects**, the MSBuild task is still available and will compile your scss during build and publish.
 
 ## Publish
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -34,6 +35,8 @@ namespace AspNetCore.SassCompiler
         public override bool Execute()
         {
             var options = GetSassCompilerOptions();
+            if (options == null)
+                return false;
 
             var generatedFiles = new List<ITaskItem>();
 
@@ -47,20 +50,19 @@ namespace AspNetCore.SassCompiler
 
         private SassCompilerOptions GetSassCompilerOptions()
         {
+            var configuration = ReadConfigFile();
+            if (configuration == null)
+                return null;
+
             var options = new SassCompilerOptions();
 
-            var configuration = ReadConfigFile();
+            BindConfiguration(options, configuration);
 
-            if (configuration != null)
+            if (configuration.TryGetValue("Configurations", out var value) && value is IDictionary<string, object> configOverrides)
             {
-                BindConfiguration(options, configuration);
-
-                if (configuration.TryGetValue("Configurations", out var value) && value is IDictionary<string, object> configOverrides)
+                if (!string.IsNullOrEmpty(Configuration) && configOverrides.TryGetValue(Configuration, out value) && value is IDictionary<string, object> overrides)
                 {
-                    if (!string.IsNullOrEmpty(Configuration) && configOverrides.TryGetValue(Configuration, out value) && value is IDictionary<string, object> overrides)
-                    {
-                        BindConfiguration(options, overrides);
-                    }
+                    BindConfiguration(options, overrides);
                 }
             }
 
@@ -91,25 +93,64 @@ namespace AspNetCore.SassCompiler
         {
             if (File.Exists(SassCompilerFile))
             {
-                var text = File.ReadAllText(SassCompilerFile);
-                var json = SimpleJson.SimpleJson.DeserializeObject(text);
-                if (json is IDictionary<string, object> dict)
-                    return dict;
-            }
-            else if (File.Exists(AppsettingsFile))
-            {
-                var text = File.ReadAllText(AppsettingsFile);
-                var json = SimpleJson.SimpleJson.DeserializeObject(text);
-
-                if (json is IDictionary<string, object> root
-                    && root.TryGetValue("SassCompiler", out var section)
-                    && section is IDictionary<string, object> dict)
+                try
                 {
-                    return dict;
+                    var text = File.ReadAllText(SassCompilerFile);
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        var json = SimpleJson.SimpleJson.DeserializeObject(text);
+                        if (json is IDictionary<string, object> dict)
+                        {
+                            if (dict.ContainsKey("SassCompiler") && dict["SassCompiler"] is IDictionary<string, object>)
+                            {
+                                Log.LogError("Detected 'SassCompiler' key in the sasscompiler.json, this does not work. Remove the 'SassCompiler' key so that the configuration keys are directly on the root object.");
+                                return null;
+                            }
+
+                            return dict;
+                        }
+                    }
+                    else
+                    {
+                        Log.LogWarning("sasscompiler.json exists but is empty, ignoring it.");
+                    }
+                }
+                catch (SerializationException ex)
+                {
+                    Log.LogError("sasscompiler.json is invalid: {0}", ex.Message);
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    Log.LogError("Unable to read sasscompiler.json: {0}", ex.ToString());
+                    return null;
                 }
             }
 
-            return null;
+            if (File.Exists(AppsettingsFile))
+            {
+                try
+                {
+                    var text = File.ReadAllText(AppsettingsFile);
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        var json = SimpleJson.SimpleJson.DeserializeObject(text);
+
+                        if (json is IDictionary<string, object> root
+                            && root.TryGetValue("SassCompiler", out var section)
+                            && section is IDictionary<string, object> dict)
+                        {
+                            return dict;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.LogWarning("Unable to read appsettings.json ({0}), ignoring it.", ex.Message);
+                }
+            }
+
+            return new Dictionary<string, object>();
         }
 
         private void BindConfiguration(SassCompilerOptions options, IDictionary<string, object> configuration)
