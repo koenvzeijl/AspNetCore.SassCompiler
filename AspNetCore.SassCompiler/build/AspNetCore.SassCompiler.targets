@@ -1,5 +1,9 @@
 ﻿<Project>
 
+  <ItemGroup>
+    <UpToDateCheckInput Include="**/*.scss" />
+  </ItemGroup>
+  
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
              AssemblyFile="$(SassCompilerTasksAssembly)" />
 
@@ -14,6 +18,7 @@
     </CompileSass>
 
     <ItemGroup>
+      <None Remove="@(CompiledCssFiles)" />
       <Content Include="@(CompiledCssFiles)" />
     </ItemGroup>
   </Target>
