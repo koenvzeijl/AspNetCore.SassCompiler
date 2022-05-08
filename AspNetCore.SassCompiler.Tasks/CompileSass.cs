@@ -12,7 +12,7 @@ namespace AspNetCore.SassCompiler
 {
     public sealed class CompileSass : Task
     {
-        private static readonly Regex _compiledFilesRe = new Regex(@"^Compiled (.+?) to (.+).$");
+        private static readonly Regex _compiledFilesRe = new Regex(@"^Compiled (.+?) to (.+).$", RegexOptions.Multiline);
 
         public string AppsettingsFile { get; set; }
 
