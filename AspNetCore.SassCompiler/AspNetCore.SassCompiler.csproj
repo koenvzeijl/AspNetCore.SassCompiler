@@ -14,6 +14,7 @@
     <LangVersion>8.0</LangVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <DevelopmentDependency>true</DevelopmentDependency>
   </PropertyGroup>
 
   <!-- Enable trimming so the dll can be trimmed away from the output if used (e.g. in blazor) -->
