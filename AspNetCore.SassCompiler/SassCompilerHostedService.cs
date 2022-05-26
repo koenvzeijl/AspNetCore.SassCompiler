@@ -50,6 +50,9 @@ namespace AspNetCore.SassCompiler
                 configuration.GetSection("SassCompiler").Bind(options);
             }
 
+            if (options.ScopedCssFolders == null)
+                options.ScopedCssFolders = SassCompilerOptions.DefaultScopedCssFolders;
+
             if (options.Arguments.Contains("--watch"))
                 options.Arguments = options.Arguments.Replace("--watch", "");
 
@@ -156,7 +159,7 @@ namespace AspNetCore.SassCompiler
             if (command.Filename == null)
                 return null;
 
-            var directories = new List<string>();
+            var directories = new HashSet<string>();
             directories.Add($"\"{Path.Join(rootFolder, _options.SourceFolder)}\":\"{Path.Join(rootFolder, _options.TargetFolder)}\"");
             if (_options.GenerateScopedCss)
             {

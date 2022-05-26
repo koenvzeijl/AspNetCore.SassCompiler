@@ -66,6 +66,9 @@ namespace AspNetCore.SassCompiler
                 }
             }
 
+            if (options.ScopedCssFolders == null)
+                options.ScopedCssFolders = SassCompilerOptions.DefaultScopedCssFolders;
+
             if (options.Arguments.Contains("--watch"))
             {
                 Log.LogWarning("Cannot use --watch as sass argument when running in MSBuild, use the .AddSassCompiler() method on the IServiceCollection instead.");
@@ -209,7 +212,7 @@ namespace AspNetCore.SassCompiler
             if (!options.GenerateScopedCss)
                 yield break;
 
-            var directories = new List<string>();
+            var directories = new HashSet<string>();
             foreach (var dir in options.ScopedCssFolders)
             {
                 if (Directory.Exists(dir))
