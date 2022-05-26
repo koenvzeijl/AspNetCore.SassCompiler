@@ -3,6 +3,7 @@ namespace AspNetCore.SassCompiler
     internal class SassCompilerOptions
     {
         public const string DefaultSourceFolder = "Styles";
+        public static readonly string[] DefaultScopedCssFolders = new[] { "Views", "Pages", "Shared", "Components" };
 
         private string _sourceFolder = DefaultSourceFolder;
         public string SourceFolder
@@ -22,6 +23,6 @@ namespace AspNetCore.SassCompiler
 
         public bool GenerateScopedCss { get; set; } = true;
 
-        public string[] ScopedCssFolders { get; set; } = new[] { "Views", "Pages", "Shared", "Components" };
+        public string[] ScopedCssFolders { get; set; } = null;
     }
 }
