@@ -38,23 +38,26 @@ jobs:
         env:
           SASS_VERSION: ${{ steps.version-check.outputs.sass-version }}
         run: |
-          curl -sL -o dart-sass-linux.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-linux-x64.tar.gz"
-          curl -sL -o dart-sass-macos.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-macos-x64.tar.gz"
-          curl -sL -o dart-sass-windows.zip "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-windows-x64.zip"
+          curl -sL -o dart-sass-linux-x64.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-linux-x64.tar.gz"
+          curl -sL -o dart-sass-linux-arm64.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-linux-arm64.tar.gz"
+          curl -sL -o dart-sass-osx-x64.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-macos-x64.tar.gz"
+          curl -sL -o dart-sass-osx-arm64.tar.gz "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-macos-arm64.tar.gz"
+          curl -sL -o dart-sass-win-x64.zip "https://github.com/sass/dart-sass/releases/download/$SASS_VERSION/dart-sass-$SASS_VERSION-windows-x64.zip"
 
-          rm -rf AspNetCore.SassCompiler/runtimes/{linux,osx,win}-x64/*
+          rm -rf AspNetCore.SassCompiler/runtimes/
+          mkdir -p AspNetCore.SassCompiler/runtimes/{linux-x64,linux-arm64,osx-x64,osx-arm64,win-x64}
 
-          tar xf dart-sass-linux.tar.gz
-          mv dart-sass/* AspNetCore.SassCompiler/runtimes/linux-x64
-          rm -rf dart-sass
+          for runtime in "linux-x64" "linux-arm64" "osx-x64" "osx-arm64"; do
+            tar xf "dart-sass-$runtime.tar.gz"
+            mv dart-sass/* "AspNetCore.SassCompiler/runtimes/$runtime/"
+            rm -rf dart-sass
+          done
 
-          tar xf dart-sass-macos.tar.gz
-          mv dart-sass/* AspNetCore.SassCompiler/runtimes/osx-x64
-          rm -rf dart-sass
-
-          7z x -bb1 dart-sass-windows.zip
-          mv dart-sass/* AspNetCore.SassCompiler/runtimes/win-x64
-          rm -rf dart-sass
+          for runtime in "win-x64"; do
+            7z x -bb1 "dart-sass-$runtime.zip"
+            mv dart-sass/* "AspNetCore.SassCompiler/runtimes/$runtime/"
+            rm -rf dart-sass
+          done
 
           rm dart-sass-*
 

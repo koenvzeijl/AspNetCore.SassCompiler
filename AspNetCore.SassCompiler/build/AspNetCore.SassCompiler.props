@@ -1,13 +1,22 @@
 ﻿<Project>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-x64\sass</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Linux'))"> </SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\sass</SassCompilerBuildCommand>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Linux'))"> </SassCompilerBuildSnapshot>
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\dart</SassCompilerBuildCommand>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\sass.snapshot</SassCompilerBuildSnapshot>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
     <SassCompilerSassCompilerJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)sasscompiler.json</SassCompilerSassCompilerJson>
 
@@ -35,9 +44,11 @@
     <None Include="$(SassCompilerBuildCommand)" Link="runtimes\win-x64\src\dart.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\win-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildCommand)" Link="runtimes\linux-x64\sass" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildCommand)" Link="runtimes\linux-arm64\sass" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildCommand)" Link="runtimes\osx-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\osx-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <Content Update="sasscompiler.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" Pack="false" />
+    <None Include="$(SassCompilerBuildCommand)" Link="runtimes\osx-arm64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(SassCompilerBuildSnapshot)" Link="runtimes\osx-arm64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(SassCompilerEnableWatcher)' == 'false'">

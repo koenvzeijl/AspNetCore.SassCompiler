@@ -195,23 +195,8 @@ namespace AspNetCore.SassCompiler
 
             var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
 
-            string exePath, snapshotPath;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                exePath = "runtimes\\win-x64\\src\\dart.exe";
-                snapshotPath = "runtimes\\win-x64\\src\\sass.snapshot";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                exePath = "runtimes/linux-x64/sass";
-                snapshotPath = null;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                exePath = "runtimes/osx-x64/src/dart";
-                snapshotPath = "runtimes/osx-x64/src/sass.snapshot";
-            }
-            else
+            var (exePath, snapshotPath) = GetExeAndSnapshotPath();
+            if (exePath == null)
                 return (null, null);
 
             var directory = Path.GetDirectoryName(assemblyLocation);
@@ -221,6 +206,38 @@ namespace AspNetCore.SassCompiler
                     return (Path.Join(directory, exePath), snapshotPath == null ? null : "\"" + Path.Join(directory, snapshotPath) + "\"");
 
                 directory = Path.GetDirectoryName(directory);
+            }
+
+            return (null, null);
+        }
+
+        private static (string ExePath, string SnapshotPath) GetExeAndSnapshotPath()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return RuntimeInformation.OSArchitecture switch
+                {
+                    Architecture.X64 => ("runtimes\\win-x64\\src\\dart.exe", "runtimes\\win-x64\\src\\sass.snapshot"),
+                    _ => (null, null),
+                };
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return RuntimeInformation.OSArchitecture switch
+                {
+                    Architecture.X64 => ("runtimes/linux-x64/sass", null),
+                    Architecture.Arm64 => ("runtimes/linux-arm64/sass", null),
+                    _ => (null, null),
+                };
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return RuntimeInformation.OSArchitecture switch
+                {
+                    Architecture.X64 => ("runtimes/osx-x64/src/dart", "runtimes/osx-x64/src/sass.snapshot"),
+                    Architecture.Arm64 => ("runtimes/osx-arm64/src/dart", "runtimes/osx-arm64/src/sass.snapshot"),
+                    _ => (null, null),
+                };
             }
 
             return (null, null);
