@@ -34,6 +34,12 @@ namespace AspNetCore.SassCompiler
 
         public override bool Execute()
         {
+            if (string.IsNullOrWhiteSpace(Command))
+            {
+                Log.LogWarning("Your OS or CPU architecture is currently not supported.");
+                return false;
+            }
+
             var options = GetSassCompilerOptions();
             if (options == null)
                 return false;
