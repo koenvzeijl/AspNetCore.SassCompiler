@@ -19,7 +19,10 @@
 
     <ItemGroup>
       <None Remove="@(CompiledCssFiles)" />
-      <Content Include="@(CompiledCssFiles)" />
+
+      <!-- Fix to only include files that were newly generated as to not have duplicate Content items. -->
+      <_NewCompiledCssFiles Include="@(CompiledCssFiles)" Exclude="@(Content)" />
+      <Content Include="@(_NewCompiledCssFiles)" />
     </ItemGroup>
   </Target>
 
