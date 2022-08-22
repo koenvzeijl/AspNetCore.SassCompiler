@@ -27,6 +27,7 @@ You can also adjust the default configuration in the appsettings.json or sasscom
 | Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable                   |
 | GenerateScopedCss | true                                       | Enable/disable support for scoped scss                         |
 | ScopedCssFolders  | ["Views", "Pages", "Shared", "Components"] | The folders in which .scss files are considered for scoped css |
+| IncludePaths      | []                                         | Add folders to search in when importing modules                |
 
 ### Examples
 
@@ -41,6 +42,7 @@ You can also adjust the default configuration in the appsettings.json or sasscom
     "Arguments": "--style=compressed",
     "GenerateScopedCss": true,
     "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
+    "IncludePaths": [],
     
     // You can override specific options based on the build configuration
     "Configurations": {
@@ -63,6 +65,7 @@ You can also adjust the default configuration in the appsettings.json or sasscom
   "Arguments": "--style=compressed",
   "GenerateScopedCss": true,
   "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
+  "IncludePaths": [],
 
   // You can override specific options based on the build configuration
   "Configurations": {

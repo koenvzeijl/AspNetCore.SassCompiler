@@ -1,0 +1,5 @@
+@import 'variables'; // This should be taken from the Styles directory because of the load path
+
+h1 {
+  color: $header-color;
+}

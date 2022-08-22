@@ -24,5 +24,15 @@ namespace AspNetCore.SassCompiler
         public bool GenerateScopedCss { get; set; } = true;
 
         public string[] ScopedCssFolders { get; set; } = null;
+
+        public string[] IncludePaths { get; set; } = null;
+
+        public string GetLoadPathArguments()
+        {
+            if (IncludePaths == null || IncludePaths.Length == 0)
+                return "";
+
+            return $"--load-path {string.Join(" --load-path ", IncludePaths)}";
+        }
     }
 }
