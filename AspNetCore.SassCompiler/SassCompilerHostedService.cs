@@ -175,7 +175,7 @@ namespace AspNetCore.SassCompiler
 
             var process = new Process();
             process.StartInfo.FileName = command.Filename;
-            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_options.Arguments} {string.Join(" ", directories)}";
+            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_options.Arguments} {_options.GetLoadPathArguments()} {string.Join(" ", directories)}";
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;

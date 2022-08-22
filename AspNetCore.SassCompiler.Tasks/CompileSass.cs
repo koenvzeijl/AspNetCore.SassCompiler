@@ -175,6 +175,8 @@ namespace AspNetCore.SassCompiler
                 options.GenerateScopedCss = generateScopedCss;
             if (configuration.TryGetValue("ScopedCssFolders", out value) && value is IList<object> scopedCssFolders)
                 options.ScopedCssFolders = scopedCssFolders.Where(x => x is string).Cast<string>().ToArray();
+            if (configuration.TryGetValue("IncludePaths", out value) && value is IList<object> includePaths)
+                options.IncludePaths = includePaths.OfType<string>().ToArray();
         }
 
         private IEnumerable<ITaskItem> GenerateSourceTarget(SassCompilerOptions options)
@@ -182,7 +184,7 @@ namespace AspNetCore.SassCompiler
             if (Directory.Exists(options.SourceFolder))
             {
                 var arguments =
-                    $"{Snapshot} {options.Arguments} {options.SourceFolder}:{options.TargetFolder} --update";
+                    $"{Snapshot} {options.Arguments} {options.GetLoadPathArguments()} {options.SourceFolder}:{options.TargetFolder} --update";
             
                 var (success, output, error) = GenerateCss(arguments);
 
@@ -228,7 +230,7 @@ namespace AspNetCore.SassCompiler
             if (directories.Count == 0)
                 yield break;
 
-            var arguments = $"{Snapshot} {options.Arguments} {string.Join(" ", directories)} --update";
+            var arguments = $"{Snapshot} {options.Arguments} {options.GetLoadPathArguments()} {string.Join(" ", directories)} --update";
             
             var (success, output, error) = GenerateCss(arguments);
 
