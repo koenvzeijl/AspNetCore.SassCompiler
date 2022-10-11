@@ -98,6 +98,10 @@ only be an issue when you're developing inside of a docker container, running th
 application in docker is supported as the compiler is automatically run during the MSBuild publish
 step. See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44) issue for the progress.
 
+#### Using Sass watcher in a multi-project setting
+
+If you've styles in multiple projects you will need too install the package into every project that contains styles that need to be compiled.
+
 ## Blazor WASM
 If you use this with Blazor WebAssembly and want to customize the settings you need to use the sasscompiler.json, using appsettings.json is not supported.
 **The sass watcher is currently not supported for Blazor WebAssembly projects**, the MSBuild task is still available and will compile your scss during build and publish.

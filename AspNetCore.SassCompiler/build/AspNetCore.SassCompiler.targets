@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
 
   <ItemGroup>
     <UpToDateCheckInput Include="**/*.scss" />
@@ -24,6 +24,10 @@
       <_NewCompiledCssFiles Include="@(CompiledCssFiles)" Exclude="@(Content)" />
       <Content Include="@(_NewCompiledCssFiles)" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="Create Sass bin references" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="obj\$(AssemblyName).sasscompiler" Lines="$(ProjectDir)" Overwrite="true"/>
   </Target>
 
 </Project>

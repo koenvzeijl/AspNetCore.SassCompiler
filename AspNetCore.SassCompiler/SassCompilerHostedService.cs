@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -153,23 +153,28 @@ namespace AspNetCore.SassCompiler
 
         private Process GetSassProcess()
         {
-            var rootFolder = Directory.GetCurrentDirectory();
-
             var command = GetSassCommand();
             if (command.Filename == null)
                 return null;
 
             var directories = new HashSet<string>();
-            directories.Add($"\"{Path.Join(rootFolder, _options.SourceFolder)}\":\"{Path.Join(rootFolder, _options.TargetFolder)}\"");
-            if (_options.GenerateScopedCss)
-            {
-                foreach (var dir in _options.ScopedCssFolders)
-                {
-                    if (dir == _options.SourceFolder)
-                        continue;
+            var sassProjects = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.sasscompiler");
 
-                    if (Directory.Exists(Path.Join(rootFolder, dir)))
-                        directories.Add($"\"{Path.Join(rootFolder, dir)}\":\"{Path.Join(rootFolder, dir)}\"");
+            foreach (var referenceFile in sassProjects)
+            {
+                var projectFolder = File.ReadAllText(referenceFile).TrimEnd('\r', '\n', '\\');
+                directories.Add($"\"{Path.Join(projectFolder, _options.SourceFolder)}\":\"{Path.Join(projectFolder, _options.TargetFolder)}\"");
+
+                if (_options.GenerateScopedCss)
+                {
+                    foreach (var dir in _options.ScopedCssFolders)
+                    {
+                        if (dir == _options.SourceFolder)
+                            continue;
+
+                        if (Directory.Exists(Path.Join(projectFolder, dir)))
+                            directories.Add($"\"{Path.Join(projectFolder, dir)}\":\"{Path.Join(projectFolder, dir)}\"");
+                    }
                 }
             }
 

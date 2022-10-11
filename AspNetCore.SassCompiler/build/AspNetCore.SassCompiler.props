@@ -55,4 +55,8 @@
     <Content Update="sasscompiler.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="false" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
+    <ContentWithTargetPath Include="obj\$(AssemblyName).sasscompiler" TargetPath="$(AssemblyName).sasscompiler" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>
