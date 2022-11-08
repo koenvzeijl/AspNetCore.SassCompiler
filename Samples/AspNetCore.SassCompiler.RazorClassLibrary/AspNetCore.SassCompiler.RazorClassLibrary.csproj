@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" ReferenceOutputAssembly="true" />
   </ItemGroup>
 
   <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->
