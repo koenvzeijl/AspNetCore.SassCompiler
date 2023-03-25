@@ -1,7 +1,7 @@
 # AspNetCore.SassCompiler
 [![NuGet Version](https://img.shields.io/nuget/v/AspNetCore.SassCompiler.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.SassCompiler/)
 
-Sass Compiler Library for .NET Core 3.1/5.x./6.x without node.
+Sass Compiler Library for .NET Core 3.1/5.x./6.x/7.x without node.
 
 ## Installation
 The installation of this package is quite simple, you can install this package using NuGet with the following command:
