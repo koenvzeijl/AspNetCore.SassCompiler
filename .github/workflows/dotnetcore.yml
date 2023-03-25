@@ -22,7 +22,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -32,7 +32,7 @@ jobs:
         test -s Samples/AspNetCore.SassCompiler.Sample31/wwwroot/css/site_sass.css
         test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
         test -s Samples/AspNetCore.SassCompiler.BlazorSample/Pages/Counter.razor.css
-        test -s Samples/AspNetCore.SassCompiler.BlazorSample/obj/Release/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css
+        test -s Samples/AspNetCore.SassCompiler.BlazorSample/obj/Release/net7.0/scopedcss/Pages/Counter.razor.rz.scp.css
 
   publish:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Publish NuGet
       id: publish_nuget
       uses: alirezanet/publish-nuget@v3.0.4
