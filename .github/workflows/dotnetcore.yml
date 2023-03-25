@@ -16,11 +16,11 @@ jobs:
         os: [ windows-latest, macos-latest, ubuntu-latest ]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
     - name: Install dependencies
@@ -39,16 +39,16 @@ jobs:
     needs: [ build ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
     - name: Publish NuGet
       id: publish_nuget
-      uses: alirezanet/publish-nuget@v3.0.3
+      uses: alirezanet/publish-nuget@v3.0.4
       with:
         PROJECT_FILE_PATH: AspNetCore.SassCompiler/AspNetCore.SassCompiler.csproj
         PACKAGE_NAME: AspNetCore.SassCompiler
@@ -57,10 +57,6 @@ jobs:
     - name: Create release
       id: create_release
       if: success() && steps.publish_nuget.outputs.version != ''
-      uses: actions/create-release@v1
-      with:
-        tag_name: ${{ steps.publish_nuget.outputs.version }}
-        release_name: ${{ steps.publish_nuget.outputs.version }}
-        body: ""
+      run: gh release create ${{ steps.publish_nuget.outputs.version }} --generate-notes
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

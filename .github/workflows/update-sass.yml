@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Check newer version
@@ -28,7 +28,7 @@ jobs:
             echo "Found newer version of dart-sass: $latest_version"
 
             if ! git branch -a | grep "dart-sass/$latest_version" >/dev/null ; then
-              echo ::set-output name=sass-version::${latest_version}
+              echo "sass-version=${latest_version}" >> $GITHUB_OUTPUT
             else
               echo "A branch already exists for this version, skipping"
             fi
@@ -65,7 +65,7 @@ jobs:
 
       - name: Create Pull Request
         if: success() && steps.version-check.outputs.sass-version != ''
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Update dart-sass to ${{ steps.version-check.outputs.sass-version }}
           branch: dart-sass/${{ steps.version-check.outputs.sass-version }}
