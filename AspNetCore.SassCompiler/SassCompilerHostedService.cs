@@ -218,6 +218,7 @@ namespace AspNetCore.SassCompiler
                 return RuntimeInformation.OSArchitecture switch
                 {
                     Architecture.X64 => ("runtimes\\win-x64\\src\\dart.exe", "runtimes\\win-x64\\src\\sass.snapshot"),
+                    Architecture.Arm64 => ("runtimes\\win-x64\\src\\dart.exe", "runtimes\\win-x64\\src\\sass.snapshot"),
                     _ => (null, null),
                 };
             }
