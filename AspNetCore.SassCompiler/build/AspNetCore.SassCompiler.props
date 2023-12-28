@@ -10,6 +10,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">
+    <!-- There are no win-arm executables, but the x64 binaries should still run using x64-emulation -->
+    <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe</SassCompilerBuildCommand>
+    <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot</SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\sass</SassCompilerBuildCommand>
     <SassCompilerBuildSnapshot Condition="$([MSBuild]::IsOSPlatform('Linux'))"> </SassCompilerBuildSnapshot>
     <SassCompilerBuildCommand Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\dart</SassCompilerBuildCommand>
