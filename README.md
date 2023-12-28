@@ -107,6 +107,10 @@ If you use this with Blazor WebAssembly and want to customize the settings you n
 This library also includes an MSBuild task that runs during the publish of your application. Because of this you don't need to include
 the Sass Watcher in your release builds and you can safely add the generated .css files to the .gitignore file as they are regenerated during publish. 
 
+### Alpine linux
+If you're publishing your application inside an alpine linux container, you will need to install `gcompat` (using `apk add gcompat`) before running `dotnet build` or `dotnet publish`.
+This is needed because the dart runtime which is what the `sass` compiler uses requires this package on alpine linux.
+
 ## Examples
 To provide you with examples, a configured version of a .NET 5.0 project and a configured .NET 6.0 Blazor app are added in the /Samples folder. Please see the link below for quick access
 
