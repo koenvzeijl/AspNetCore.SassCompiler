@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Include="..\AspNetCore.SassCompiler\SassCompilerOptions.cs" />
+    <Compile Include="..\AspNetCore.SassCompiler\SassCompilerCompilationOptions.cs" />
   </ItemGroup>
 
 </Project>

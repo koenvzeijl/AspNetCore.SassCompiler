@@ -1,5 +1,4 @@
-Samples/*/wwwroot/css/site_sass.css
-Samples/*/wwwroot/css/site_sass.css.map
+Samples/*/wwwroot/**/*.css
 Samples/**/*.razor.css
 Samples/**/*.css.map
 

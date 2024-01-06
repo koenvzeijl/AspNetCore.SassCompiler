@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -46,8 +47,7 @@ namespace AspNetCore.SassCompiler
 
             var generatedFiles = new List<ITaskItem>();
 
-            generatedFiles.AddRange(GenerateSourceTarget(options));
-            generatedFiles.AddRange(GenerateScopedCss(options));
+            generatedFiles.AddRange(GenerateCss(options));
 
             GeneratedFiles = generatedFiles.ToArray();
 
@@ -62,9 +62,24 @@ namespace AspNetCore.SassCompiler
 
             var options = new SassCompilerOptions();
 
+            BindCompilation(options, configuration);
             BindConfiguration(options, configuration);
 
-            if (configuration.TryGetValue("Configurations", out var value) && value is IDictionary<string, object> configOverrides)
+            if (configuration.TryGetValue("Compilations", out var value) && value is IList<object> compilations)
+            {
+                options.Compilations ??= new List<SassCompilerCompilationOptions>();
+
+                foreach (var compilationConfiguration in compilations.OfType<IDictionary<string, object>>())
+                {
+                    var compilationOptions = new SassCompilerCompilationOptions();
+                    BindCompilation(compilationOptions, compilationConfiguration);
+
+                    if (!string.IsNullOrEmpty(compilationOptions.Source) && !string.IsNullOrEmpty(compilationOptions.Target))
+                        options.Compilations.Add(compilationOptions);
+                }
+            }
+
+            if (configuration.TryGetValue("Configurations", out value) && value is IDictionary<string, object> configOverrides)
             {
                 if (!string.IsNullOrEmpty(Configuration) && configOverrides.TryGetValue(Configuration, out value) && value is IDictionary<string, object> overrides)
                 {
@@ -162,13 +177,9 @@ namespace AspNetCore.SassCompiler
             return new Dictionary<string, object>();
         }
 
-        private void BindConfiguration(SassCompilerOptions options, IDictionary<string, object> configuration)
+        private static void BindConfiguration(SassCompilerOptions options, IDictionary<string, object> configuration)
         {
             object value;
-            if (configuration.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
-                options.SourceFolder = sourceFolder;
-            if (configuration.TryGetValue("TargetFolder", out value) && value is string targetFolder)
-                options.TargetFolder = targetFolder;
             if (configuration.TryGetValue("Arguments", out value) && value is string arguments)
                 options.Arguments = arguments;
             if (configuration.TryGetValue("GenerateScopedCss", out value) && value is bool generateScopedCss)
@@ -179,64 +190,67 @@ namespace AspNetCore.SassCompiler
                 options.IncludePaths = includePaths.OfType<string>().ToArray();
         }
 
-        private IEnumerable<ITaskItem> GenerateSourceTarget(SassCompilerOptions options)
+        private static void BindCompilation(SassCompilerCompilationOptions options, IDictionary<string, object> configuration)
         {
-            if (Directory.Exists(options.SourceFolder))
-            {
-                var arguments =
-                    $"{Snapshot} {options.Arguments} {options.GetLoadPathArguments()} {options.SourceFolder}:{options.TargetFolder} --update";
-            
-                var (success, output, error) = GenerateCss(arguments);
-
-                if (!success)
-                {
-                    Log.LogError($"Error running sass compiler: {error}.");
-                    yield break;
-                }
-
-                if (!string.IsNullOrWhiteSpace(error))
-                {
-                    Log.LogWarning(error);
-                }
-
-                var matches = _compiledFilesRe.Matches(output);
-
-                foreach (Match match in matches)
-                {
-                    var cssFile = match.Groups[2].Value;
-
-                    var generatedFile = new TaskItem(cssFile);
-                    yield return generatedFile;
-                }
-            }
-            else if (options.SourceFolder != SassCompilerOptions.DefaultSourceFolder)
-            {
-                Log.LogError($"Sass source folder {options.SourceFolder} does not exist.");
-            }
+            object value;
+            if (configuration.TryGetValue("Source", out value) && value is string source)
+                options.Source = source;
+            else if (configuration.TryGetValue("SourceFolder", out value) && value is string sourceFolder)
+                options.Source = sourceFolder;
+            if (configuration.TryGetValue("Target", out value) && value is string target)
+                options.Target = target;
+            else if (configuration.TryGetValue("TargetFolder", out value) && value is string targetFolder)
+                options.Target = targetFolder;
+            if (configuration.TryGetValue("Optional", out value) && value is bool optional)
+                options.Optional = optional;
         }
 
-        private IEnumerable<ITaskItem> GenerateScopedCss(SassCompilerOptions options)
+        private IEnumerable<ITaskItem> GenerateCss(SassCompilerOptions options)
         {
-            if (!options.GenerateScopedCss)
-                yield break;
+            var rootFolder = Directory.GetCurrentDirectory();
 
-            var directories = new HashSet<string>();
-            foreach (var dir in options.ScopedCssFolders)
+            var processArguments = new StringBuilder();
+            processArguments.Append(Snapshot);
+            processArguments.AppendFormat(" {0}", options.Arguments);
+
+            if (options.IncludePaths?.Length > 0)
             {
-                if (Directory.Exists(dir))
-                    directories.Add(dir);
+                foreach (var includePath in options.IncludePaths)
+                {
+                    processArguments.AppendFormat(" --load-path={0}", includePath);
+                }
             }
 
-            if (directories.Count == 0)
+            var hasSources = false;
+            foreach (var compilation in options.GetAllCompilations())
+            {
+                var fullSource = Path.GetFullPath(Path.Combine(rootFolder, compilation.Source));
+                var fullTarget = Path.GetFullPath(Path.Combine(rootFolder, compilation.Target));
+
+                if (!Directory.Exists(fullSource) && !File.Exists(fullSource))
+                {
+                    if (compilation.Optional == false)
+                        Log.LogError($"Could not compile sass for source {options.Source}, because it does not exist.");
+
+                    continue;
+                }
+
+                hasSources = true;
+                processArguments.AppendFormat(" \"{0}\":\"{1}\"", fullSource, fullTarget);
+            }
+
+            if (!hasSources)
                 yield break;
 
-            var arguments = $"{Snapshot} {options.Arguments} {options.GetLoadPathArguments()} {string.Join(" ", directories)} --update";
-            
+            processArguments.Append(" --update");
+
+            var arguments = processArguments.ToString();
+
             var (success, output, error) = GenerateCss(arguments);
 
             if (!success)
             {
-                Log.LogError($"Error running sass compiler: {error}.");
+                Log.LogError($"Error running sass compiler: {error.Trim()}");
                 yield break;
             }
 
@@ -244,7 +258,7 @@ namespace AspNetCore.SassCompiler
             {
                 Log.LogWarning(error);
             }
-            
+
             var matches = _compiledFilesRe.Matches(output);
 
             foreach (Match match in matches)
@@ -268,6 +282,8 @@ namespace AspNetCore.SassCompiler
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+
+            Log.LogMessage(MessageImportance.Normal, $"Compiling sass: {Command} {arguments}");
 
             string error = null;
             compiler.ErrorDataReceived += (sender, e) =>
