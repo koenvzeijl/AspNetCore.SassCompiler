@@ -1,7 +1,7 @@
 # AspNetCore.SassCompiler
 [![NuGet Version](https://img.shields.io/nuget/v/AspNetCore.SassCompiler.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.SassCompiler/)
 
-Sass Compiler Library for .NET Core 3.1/5.x./6.x without node.
+Sass Compiler Library for .NET 6 and above, without node.
 
 ## Installation
 The installation of this package is quite simple, you can install this package using NuGet with the following command:
@@ -112,10 +112,12 @@ If you're publishing your application inside an alpine linux container, you will
 This is needed because the dart runtime which is what the `sass` compiler uses requires this package on alpine linux.
 
 ## Examples
-To provide you with examples, a configured version of a .NET 5.0 project and a configured .NET 6.0 Blazor app are added in the /Samples folder. Please see the link below for quick access
+Take a look at one of our examples on how it can be integrated in your project. We've created example projects for ASP.NET Core MVC, Blazor Server/Wasm and RazorClassLibrary projects.
 
-[.NET Core 3.1](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample31)
+[MVC](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
 
-[.NET 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
+[Blazor Server](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorSample)
 
-[.NET 6.0 / Blazor](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorSample)
+[Blazor WASM](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorWasmSample)
+
+[Razor Class Library](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.RazorClassLibrary)
