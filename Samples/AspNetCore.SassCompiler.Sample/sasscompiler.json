@@ -1,0 +1,19 @@
+{
+  "Source": "Styles",
+  "Target": "wwwroot/css",
+  "Arguments": "--style=compressed",
+  "IncludePaths": ["Styles"],
+
+  "Compilations": [
+    {
+      "Source": "Library/lib.scss",
+      "Target": "wwwroot/lib/css/lib.min.css"
+    }
+  ],
+
+  "Configurations": {
+    "Debug": {
+      "Arguments": "--style=expanded"
+    }
+  }
+}

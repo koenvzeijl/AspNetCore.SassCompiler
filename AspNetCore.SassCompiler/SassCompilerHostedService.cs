@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -159,23 +159,34 @@ namespace AspNetCore.SassCompiler
             if (command.Filename == null)
                 return null;
 
-            var directories = new HashSet<string>();
-            directories.Add($"\"{Path.Join(rootFolder, _options.SourceFolder)}\":\"{Path.Join(rootFolder, _options.TargetFolder)}\"");
-            if (_options.GenerateScopedCss)
-            {
-                foreach (var dir in _options.ScopedCssFolders)
-                {
-                    if (dir == _options.SourceFolder)
-                        continue;
+            var processArguments = new StringBuilder();
+            processArguments.Append(command.Snapshot);
+            processArguments.Append(" --error-css");
+            processArguments.Append(" --watch");
+            processArguments.AppendFormat(" {0}", _options.Arguments);
 
-                    if (Directory.Exists(Path.Join(rootFolder, dir)))
-                        directories.Add($"\"{Path.Join(rootFolder, dir)}\":\"{Path.Join(rootFolder, dir)}\"");
+            if (_options.IncludePaths?.Length > 0)
+            {
+                foreach (var includePath in _options.IncludePaths)
+                {
+                    processArguments.AppendFormat(" --load-path={0}", includePath);
                 }
+            }
+
+            foreach (var compilation in _options.GetAllCompilations())
+            {
+                var fullSource = Path.GetFullPath(Path.Combine(rootFolder, compilation.Source));
+                var fullTarget = Path.GetFullPath(Path.Combine(rootFolder, compilation.Target));
+
+                if (!Directory.Exists(fullSource) && !File.Exists(fullSource))
+                    continue;
+
+                processArguments.AppendFormat(" \"{0}\":\"{1}\"", fullSource, fullTarget);
             }
 
             var process = new Process();
             process.StartInfo.FileName = command.Filename;
-            process.StartInfo.Arguments = $"{command.Snapshot} --error-css --watch {_options.Arguments} {_options.GetLoadPathArguments()} {string.Join(" ", directories)}";
+            process.StartInfo.Arguments = processArguments.ToString();
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;

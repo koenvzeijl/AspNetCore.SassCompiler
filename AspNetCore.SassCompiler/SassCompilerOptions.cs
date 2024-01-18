@@ -1,23 +1,20 @@
+using System.Collections.Generic;
+
 namespace AspNetCore.SassCompiler
 {
-    internal class SassCompilerOptions
+    internal class SassCompilerOptions : SassCompilerCompilationOptions
     {
-        public const string DefaultSourceFolder = "Styles";
+        public const string DefaultSource = "Styles";
+        public const string DefaultTarget = "wwwroot/css";
         public static readonly string[] DefaultScopedCssFolders = new[] { "Views", "Pages", "Shared", "Components" };
 
-        private string _sourceFolder = DefaultSourceFolder;
-        public string SourceFolder
+        public SassCompilerOptions()
         {
-            get => _sourceFolder;
-            set => _sourceFolder = value?.Replace('\\', '/');
+            Source = DefaultSource;
+            Target = DefaultTarget;
         }
 
-        private string _targetFolder = "wwwroot/css";
-        public string TargetFolder
-        {
-            get => _targetFolder;
-            set => _targetFolder = value?.Replace('\\', '/');
-        }
+        public List<SassCompilerCompilationOptions> Compilations { get; set; } = null;
 
         public string Arguments { get; set; } = "--error-css";
 
@@ -27,12 +24,37 @@ namespace AspNetCore.SassCompiler
 
         public string[] IncludePaths { get; set; } = null;
 
-        public string GetLoadPathArguments()
+        public IEnumerable<SassCompilerCompilationOptions> GetAllCompilations()
         {
-            if (IncludePaths == null || IncludePaths.Length == 0)
-                return "";
+            var seenSources = new HashSet<string>();
 
-            return $"--load-path {string.Join(" --load-path ", IncludePaths)}";
+            if (!string.IsNullOrEmpty(Source) && !string.IsNullOrEmpty(Target))
+            {
+                seenSources.Add(Source);
+                Optional ??= Source == DefaultSource && Target == DefaultTarget && (Compilations != null || GenerateScopedCss);
+                yield return this;
+            }
+
+            if (Compilations != null)
+            {
+                foreach (var compilation in Compilations)
+                {
+                    seenSources.Add(compilation.Source);
+                    compilation.Optional ??= false;
+                    yield return compilation;
+                }
+            }
+
+            if (GenerateScopedCss)
+            {
+                foreach (var folder in ScopedCssFolders)
+                {
+                    if (!seenSources.Add(folder))
+                        continue;
+
+                    yield return new SassCompilerCompilationOptions { Source = folder, Target = folder, Optional = true };
+                }
+            }
         }
     }
 }

@@ -1,17 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <PackageId>AspNetCore.SassCompiler</PackageId>
     <Version>1.69.7</Version>
     <Authors>koenvzeijl,sleeuwen,Michaelvs97</Authors>
-    <Description>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node</Description>
-    <PackageDescription>Sass Compiler Library for .NET Core 3.1/5.x/6.x. without node, using dart-sass as a compiler</PackageDescription>
+    <Description>Sass Compiler Library for .NET 6 and above. without node</Description>
+    <PackageDescription>Sass Compiler Library for .NET 6 and above. without node, using dart-sass as a compiler</PackageDescription>
     <PackageTags>sass;scss;aspnetcore;dart-sass;compiler;watch;blazor;</PackageTags>
     <RepositoryUrl>https://github.com/koenvzeijl/AspNetCore.SassCompiler</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.SassCompiler</Title>
-    <LangVersion>8.0</LangVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

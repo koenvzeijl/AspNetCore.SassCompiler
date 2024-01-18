@@ -23,14 +23,11 @@
     <SassCompilerAppsettingsJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)appsettings.json</SassCompilerAppsettingsJson>
     <SassCompilerSassCompilerJson Condition="'$(SassAppsettingsFile)' == ''">$(ProjectDir)sasscompiler.json</SassCompilerSassCompilerJson>
 
-    <SassCompilerSourceFolder Condition="'$(SassCompilerSourceFolder)' == ''">Styles</SassCompilerSourceFolder>
-    <SassCompilerTargetFolder Condition="'$(SassCompilerTargetFolder)' == ''">wwwroot\css</SassCompilerTargetFolder>
-    <SassCompilerArguments Condition="'$(SassCompilerArguments)' == ''">--style=compressed --error-css --no-source-map</SassCompilerArguments>
-
     <SassCompilerTasksAssembly Condition=" '$(SassCompilerTasksAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
 
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(RuntimeIdentifier)' == 'browser-wasm'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
+    <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(OutputType)' == 'Library'">false</SassCompilerEnableWatcher>
 
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">Debug</SassCompilerConfiguration>

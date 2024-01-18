@@ -1,7 +1,7 @@
 {
   "Arguments": "--error-css --style=expanded --source-map",
-  "SourceFolder": "Styles",
-  "TargetFolder": "wwwroot/css",
+  "Source": "Styles",
+  "Target": "wwwroot/css",
   "GenerateScopedCss": true,
   "ScopedCssFolders": ["Shared", "Pages"],
 

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,7 @@
 
   <ItemGroup>
     <Compile Include="..\AspNetCore.SassCompiler\SassCompilerOptions.cs" />
+    <Compile Include="..\AspNetCore.SassCompiler\SassCompilerCompilationOptions.cs" />
   </ItemGroup>
 
 </Project>

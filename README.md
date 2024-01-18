@@ -1,7 +1,7 @@
 # AspNetCore.SassCompiler
 [![NuGet Version](https://img.shields.io/nuget/v/AspNetCore.SassCompiler.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.SassCompiler/)
 
-Sass Compiler Library for .NET Core 3.1/5.x./6.x without node.
+Sass Compiler Library for .NET 6 and above, without node.
 
 ## Installation
 The installation of this package is quite simple, you can install this package using NuGet with the following command:
@@ -15,19 +15,21 @@ dotnet add package AspNetCore.SassCompiler
 ```
 
 ## Configuration
-After adding the package, the Sass styles from the SourceFolder (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
+After adding the package, the Sass styles from the Source (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
 You can also adjust the default configuration in the appsettings.json or sasscompiler.json, do note that when using `appsettings.json` the configuration needs to be nested under a "SassCompiler" property, but when you're using `sasscompiler.json` the settings should _not_ be nested.
 
 ### Available options
 
-| Name              | Default value                              | Description                                                    |
-|-------------------|--------------------------------------------|----------------------------------------------------------------|
-| SourceFolder      | "Styles"                                   | The folder where all the .scss files reside                    |
-| TargetFolder      | "wwwroot/css"                              | The folder to output the generated .css files to               |
-| Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable                   |
-| GenerateScopedCss | true                                       | Enable/disable support for scoped scss                         |
-| ScopedCssFolders  | ["Views", "Pages", "Shared", "Components"] | The folders in which .scss files are considered for scoped css |
-| IncludePaths      | []                                         | Add folders to search in when importing modules                |
+| Name              | Default value                              | Description                                                                                                                                       |
+|-------------------|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| Source            | "Styles"                                   | The folder where all the .scss files reside, or an scss file                                                                                      |
+| Target            | "wwwroot/css"                              | When Source is a folder, the folder to output the generated .css files to<br/>When Source is a file, the .css filepath where to save the css file |
+| Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable                                                                                                      |
+| GenerateScopedCss | true                                       | Enable/disable support for scoped scss                                                                                                            |
+| ScopedCssFolders  | ["Views", "Pages", "Shared", "Components"] | The folders in which .scss files are considered for scoped css                                                                                    |
+| IncludePaths      | []                                         | Add folders to search in when importing modules                                                                                                   |
+| Compilations      | []                                         | A list of source/target pairs that should be compiled. These will be added to the default Source and Target configured above.                     |
+| Configurations    | {}                                         | Add configuration to override specific options based on the build conifguration (e.g. Debug/Release)                                              |
 
 ### Examples
 
@@ -37,13 +39,20 @@ You can also adjust the default configuration in the appsettings.json or sasscom
 ```json
 {
   "SassCompiler": {
-    "SourceFolder": "Styles",
-    "TargetFolder": "wwwroot/css",
+    "Source": "Styles",
+    "Target": "wwwroot/css",
     "Arguments": "--style=compressed",
     "GenerateScopedCss": true,
     "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
     "IncludePaths": [],
     
+    "Compilations": [
+      // Specify a specific file source/target in addition to the "Styles" -> "wwwroot/css" Source/Target above
+      { "Source":  "wwwroot/scss/site.scss", "Target":  "wwwroot/css/site.min.css" },
+      // Or an extra directory to a different target directory
+      { "Source":  "Lib/Styles", "Target":  "wwwroot/lib/css" }
+    ],
+
     // You can override specific options based on the build configuration
     "Configurations": {
       "Debug": { // These options apply only to Debug builds
@@ -60,13 +69,20 @@ You can also adjust the default configuration in the appsettings.json or sasscom
 
 ```json
 {
-  "SourceFolder": "Styles",
-  "TargetFolder": "wwwroot/css",
+  "Source": "Styles",
+  "Target": "wwwroot/css",
   "Arguments": "--style=compressed",
   "GenerateScopedCss": true,
   "ScopedCssFolders": ["Views", "Pages", "Shared", "Components"],
   "IncludePaths": [],
 
+  "Compilations": [
+    // Specify a specific file source/target in addition to the "Styles" -> "wwwroot/css" Source/Target above
+    { "Source":  "wwwroot/scss/site.scss", "Target":  "wwwroot/css/site.min.css" },
+    // Or an extra directory to a different target directory
+    { "Source":  "Lib/Styles", "Target":  "wwwroot/lib/css" }
+  ],
+  
   // You can override specific options based on the build configuration
   "Configurations": {
     "Debug": { // These options apply only to Debug builds
@@ -112,10 +128,12 @@ If you're publishing your application inside an alpine linux container, you will
 This is needed because the dart runtime which is what the `sass` compiler uses requires this package on alpine linux.
 
 ## Examples
-To provide you with examples, a configured version of a .NET 5.0 project and a configured .NET 6.0 Blazor app are added in the /Samples folder. Please see the link below for quick access
+Take a look at one of our examples on how it can be integrated in your project. We've created example projects for ASP.NET Core MVC, Blazor Server/Wasm and RazorClassLibrary projects.
 
-[.NET Core 3.1](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample31)
+[MVC](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
 
-[.NET 5.0](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.Sample)
+[Blazor Server](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorSample)
 
-[.NET 6.0 / Blazor](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorSample)
+[Blazor WASM](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.BlazorWasmSample)
+
+[Razor Class Library](https://github.com/koenvzeijl/AspNetCore.SassCompiler/tree/master/Samples/AspNetCore.SassCompiler.RazorClassLibrary)

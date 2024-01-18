@@ -19,20 +19,24 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Setup .NET Core
+    - name: Setup .NET 8
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
     - name: Install dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Validate generated css files
       run: |
-        test -s Samples/AspNetCore.SassCompiler.Sample31/wwwroot/css/site_sass.css
+        test -s Samples/AspNetCore.SassCompiler.BlazorSample/Components/Pages/Counter.razor.css
+        test -s Samples/AspNetCore.SassCompiler.BlazorSample/obj/Release/net8.0/scopedcss/Components/Pages/Counter.razor.rz.scp.css
+        test -s Samples/AspNetCore.SassCompiler.BlazorWasmSample/Pages/Counter.razor.css
+        test -s Samples/AspNetCore.SassCompiler.BlazorWasmSample/obj/Release/net8.0/scopedcss/Pages/Counter.razor.rz.scp.css
+        test -s Samples/AspNetCore.SassCompiler.RazorClassLibrary/Component1.razor.css
+        test -s Samples/AspNetCore.SassCompiler.RazorClassLibrary/obj/Release/net6.0/scopedcss/Component1.razor.rz.scp.css
         test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/css/site_sass.css
-        test -s Samples/AspNetCore.SassCompiler.BlazorSample/Pages/Counter.razor.css
-        test -s Samples/AspNetCore.SassCompiler.BlazorSample/obj/Release/net6.0/scopedcss/Pages/Counter.razor.rz.scp.css
+        test -s Samples/AspNetCore.SassCompiler.Sample/wwwroot/lib/css/lib.min.css
 
   publish:
     runs-on: ubuntu-latest
@@ -42,10 +46,10 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Setup .NET Core
+    - name: Setup .NET 8
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
     - name: Publish NuGet
       id: publish_nuget
       uses: alirezanet/publish-nuget@v3.0.4
