@@ -11,7 +11,7 @@ namespace AspNetCore.SassCompiler
     /// <remarks>References:
     ///  https://stackoverflow.com/a/4657392/386091
     ///  https://stackoverflow.com/a/9164742/386091 </remarks>
-    public static class ChildProcessTracker
+    internal static class ChildProcessTracker
     {
         /// <summary>
         /// Add the process to be tracked. If our current process is killed, the child processes

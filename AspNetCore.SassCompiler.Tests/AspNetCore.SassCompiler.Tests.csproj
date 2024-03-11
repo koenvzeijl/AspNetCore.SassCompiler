@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <SassCompilerIncludeRuntime>true</SassCompilerIncludeRuntime>
+  </PropertyGroup>
+  
+  <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->
+  <Import Project="..\AspNetCore.SassCompiler\build\AspNetCore.SassCompiler.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SassCompilerTasksAssembly Condition=" '$(Configuration)' != '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\$(Configuration)\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
+    <SassCompilerTasksAssembly Condition=" '$(Configuration)' == '' ">$(MSBuildThisFileDirectory)..\AspNetCore.SassCompiler.Tasks\bin\Debug\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.SassCompiler\AspNetCore.SassCompiler.csproj" />
+  </ItemGroup>
+
+  <!-- Only needed because we're using a ProjectReference, this is done implicitly for PackageReference's -->
+  <Import Project="..\AspNetCore.SassCompiler\build\AspNetCore.SassCompiler.targets" />
+
+</Project>
