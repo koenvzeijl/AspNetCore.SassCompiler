@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCore.SassCompiler;
 
@@ -22,6 +22,13 @@ public interface ISassCompiler
 
 internal class SassCompiler : ISassCompiler
 {
+    private readonly ILogger<SassCompiler> _logger;
+
+    public SassCompiler(ILogger<SassCompiler> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task CompileAsync(string[] args)
     {
         var escapedArgs = args.Length > 0 ? '"' + string.Join("\" \"", args) + '"' : "";
@@ -31,6 +38,8 @@ internal class SassCompiler : ISassCompiler
             throw new SassCompilerException("Sass executable not found");
 
         var errorOutput = new MemoryStream();
+
+        _logger.LogDebug("Executing sass command: {SassCommand}", $"{process.StartInfo.FileName} {process.StartInfo.Arguments}");
 
         process.Start();
         ChildProcessTracker.AddProcess(process);
@@ -67,6 +76,8 @@ internal class SassCompiler : ISassCompiler
         process.StartInfo.RedirectStandardInput = true;
 
         var errorOutput = new MemoryStream();
+
+        _logger.LogDebug("Executing sass command: {SassCommand}", $"{process.StartInfo.FileName} {process.StartInfo.Arguments}");
 
         process.Start();
         ChildProcessTracker.AddProcess(process);

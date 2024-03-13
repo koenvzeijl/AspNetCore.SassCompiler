@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace AspNetCore.SassCompiler.Tests;
@@ -9,7 +10,7 @@ public class SassCompilerTests
     public async Task CompileAsync_WithoutStreams_Success()
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var tempDirectory = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
         Directory.CreateDirectory(tempDirectory);
@@ -37,7 +38,7 @@ public class SassCompilerTests
     public async Task CompileAsync_ThrowsWithInvalidArguments(string argument)
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var input = new MemoryStream(Encoding.UTF8.GetBytes("body { color: black; }"));
 
@@ -54,7 +55,7 @@ public class SassCompilerTests
     public async Task CompileAsync_ThrowsWithInvalidInput()
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var input = new MemoryStream(Encoding.UTF8.GetBytes("body { color: black;"));
 
@@ -71,7 +72,7 @@ public class SassCompilerTests
     public async Task CompileAsync_ReturningOutputStream_Success()
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var input = new MemoryStream(Encoding.UTF8.GetBytes("body { color: black; }"));
 
@@ -87,7 +88,7 @@ public class SassCompilerTests
     public async Task CompileAsync_WithInputAndOutputStream_Success()
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var input = new MemoryStream(Encoding.UTF8.GetBytes("body { color: black; }"));
         var output = new MemoryStream();
@@ -104,7 +105,7 @@ public class SassCompilerTests
     public async Task CompileToStringAsync_Success()
     {
         // Arrange
-        var sassCompiler = new SassCompiler();
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
         var input = new MemoryStream(Encoding.UTF8.GetBytes("body { color: black; }"));
 
