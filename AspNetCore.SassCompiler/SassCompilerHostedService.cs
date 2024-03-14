@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -155,21 +152,16 @@ namespace AspNetCore.SassCompiler
         {
             var rootFolder = Directory.GetCurrentDirectory();
 
-            var command = GetSassCommand();
-            if (command.Filename == null)
-                return null;
-
             var processArguments = new StringBuilder();
-            processArguments.Append(command.Snapshot);
             processArguments.Append(" --error-css");
             processArguments.Append(" --watch");
-            processArguments.AppendFormat(" {0}", _options.Arguments);
+            processArguments.Append($" {_options.Arguments}");
 
             if (_options.IncludePaths?.Length > 0)
             {
                 foreach (var includePath in _options.IncludePaths)
                 {
-                    processArguments.AppendFormat(" --load-path={0}", includePath);
+                    processArguments.Append($" --load-path={includePath}");
                 }
             }
 
@@ -181,78 +173,11 @@ namespace AspNetCore.SassCompiler
                 if (!Directory.Exists(fullSource) && !File.Exists(fullSource))
                     continue;
 
-                processArguments.AppendFormat(" \"{0}\":\"{1}\"", fullSource, fullTarget);
+                processArguments.Append($" \"{fullSource}\":\"{fullTarget}\"");
             }
 
-            var process = new Process();
-            process.StartInfo.FileName = command.Filename;
-            process.StartInfo.Arguments = processArguments.ToString();
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-
+            var process = SassCompiler.CreateSassProcess(processArguments.ToString());
             return process;
-        }
-
-        private static (string Filename, string Snapshot) GetSassCommand()
-        {
-            var attribute = Assembly.GetEntryAssembly()?.GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
-
-            if (attribute != null)
-                return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
-
-            var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
-
-            var (exePath, snapshotPath) = GetExeAndSnapshotPath();
-            if (exePath == null)
-                return (null, null);
-
-            var directory = Path.GetDirectoryName(assemblyLocation);
-            while (!string.IsNullOrEmpty(directory) && directory != "/")
-            {
-                if (File.Exists(Path.Join(directory, exePath)))
-                    return (Path.Join(directory, exePath), snapshotPath == null ? null : "\"" + Path.Join(directory, snapshotPath) + "\"");
-
-                directory = Path.GetDirectoryName(directory);
-            }
-
-            return (null, null);
-        }
-
-        private static (string ExePath, string SnapshotPath) GetExeAndSnapshotPath()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => ("runtimes\\win-x64\\src\\dart.exe", "runtimes\\win-x64\\src\\sass.snapshot"),
-                    Architecture.Arm64 => ("runtimes\\win-x64\\src\\dart.exe", "runtimes\\win-x64\\src\\sass.snapshot"),
-                    _ => (null, null),
-                };
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => ("runtimes/linux-x64/sass", null),
-                    Architecture.Arm64 => ("runtimes/linux-arm64/sass", null),
-                    _ => (null, null),
-                };
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => ("runtimes/osx-x64/src/dart", "runtimes/osx-x64/src/sass.snapshot"),
-                    Architecture.Arm64 => ("runtimes/osx-arm64/src/dart", "runtimes/osx-arm64/src/sass.snapshot"),
-                    _ => (null, null),
-                };
-            }
-
-            return (null, null);
         }
     }
 }

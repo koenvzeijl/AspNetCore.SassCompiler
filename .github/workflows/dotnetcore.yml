@@ -27,6 +27,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --configuration Release --no-build
     - name: Validate generated css files
       run: |
         test -s Samples/AspNetCore.SassCompiler.BlazorSample/Components/Pages/Counter.razor.css

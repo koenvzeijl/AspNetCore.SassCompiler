@@ -33,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="AspNetCore.SassCompiler.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="build\*" Pack="true" PackagePath="build" />
     <None Include="runtimes\**" Pack="true" PackagePath="runtimes" />
     <None Include="..\logo.png" Pack="true" PackagePath="\" />

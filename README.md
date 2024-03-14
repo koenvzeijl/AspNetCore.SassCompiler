@@ -24,7 +24,7 @@ You can also adjust the default configuration in the appsettings.json or sasscom
 |-------------------|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | Source            | "Styles"                                   | The folder where all the .scss files reside, or an scss file                                                                                      |
 | Target            | "wwwroot/css"                              | When Source is a folder, the folder to output the generated .css files to<br/>When Source is a file, the .css filepath where to save the css file |
-| Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable                                                                                                      |
+| Arguments         | "--error-css"                              | Arguments passed to the dart-sass executable. see [here](https://sass-lang.com/documentation/cli/dart-sass/) for available arguments.             |
 | GenerateScopedCss | true                                       | Enable/disable support for scoped scss                                                                                                            |
 | ScopedCssFolders  | ["Views", "Pages", "Shared", "Components"] | The folders in which .scss files are considered for scoped css                                                                                    |
 | IncludePaths      | []                                         | Add folders to search in when importing modules                                                                                                   |
@@ -117,6 +117,16 @@ step. See [this](https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/44
 ## Blazor WASM
 If you use this with Blazor WebAssembly and want to customize the settings you need to use the sasscompiler.json, using appsettings.json is not supported.
 **The sass watcher is currently not supported for Blazor WebAssembly projects**, the MSBuild task is still available and will compile your scss during build and publish.
+
+## Compiling SCSS at runtime
+It is also possible to compile SCSS files at runtime by using the `ISassCompiler` interface. By default however, the
+sass executables are not included in a Release build. To make be able to use the `ISassCompiler` interface in production
+you need to add the following property to your csproj file: `<SassCompilerIncludeRuntime>true</SassCompilerIncludeRuntime>`.
+
+If you don't want to use the hosted service to automatically compile your scss files during development, but do want to
+have the `ISassCompiler` available, you can use the `AddSassCompilerCore()` method instead of the `AddSassCompiler()`
+method on the `IServiceCollection`. This will register what is required to use the `ISassCompiler` interface without
+registering the hosted service.
 
 ## Publish
 
