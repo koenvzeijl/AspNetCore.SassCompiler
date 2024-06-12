@@ -25,13 +25,14 @@
 
     <SassCompilerTasksAssembly Condition=" '$(SassCompilerTasksAssembly)' == '' ">$(MSBuildThisFileDirectory)..\lib\netstandard2.0\AspNetCore.SassCompiler.Tasks.dll</SassCompilerTasksAssembly>
 
-    <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == ''">$(SassCompilerIncludeRuntime)</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(RuntimeIdentifier)' == 'browser-wasm'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(OutputType)' == 'Library'">false</SassCompilerEnableWatcher>
 
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">Debug</SassCompilerConfiguration>
+
+    <SassCompilerRuntimeCopyToPublishDirectory>Never</SassCompilerRuntimeCopyToPublishDirectory>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
@@ -42,16 +43,16 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe" Link="runtimes\win-x64\src\dart.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot" Link="runtimes\win-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\src\dart" Link="runtimes\linux-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\src\sass.snapshot" Link="runtimes\linux-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\src\dart" Link="runtimes\linux-arm64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\src\sass.snapshot" Link="runtimes\linux-arm64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart" Link="runtimes\osx-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot" Link="runtimes\osx-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\dart" Link="runtimes\osx-arm64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
-    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\sass.snapshot" Link="runtimes\osx-arm64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\dart.exe" Link="runtimes\win-x64\src\dart.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\src\sass.snapshot" Link="runtimes\win-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\src\dart" Link="runtimes\linux-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\src\sass.snapshot" Link="runtimes\linux-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\src\dart" Link="runtimes\linux-arm64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\src\sass.snapshot" Link="runtimes\linux-arm64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\dart" Link="runtimes\osx-x64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\src\sass.snapshot" Link="runtimes\osx-x64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\dart" Link="runtimes\osx-arm64\src\dart" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\src\sass.snapshot" Link="runtimes\osx-arm64\src\sass.snapshot" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="$(SassCompilerRuntimeCopyToPublishDirectory)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(SassCompilerEnableWatcher)' == 'false'">

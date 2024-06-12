@@ -1,9 +1,14 @@
 ﻿<Project>
+  
+  <PropertyGroup Condition="'$(SassCompilerIncludeRuntime)' == 'true'">
+    <SassCompilerEnableWatcher>$(SassCompilerIncludeRuntime)</SassCompilerEnableWatcher>
+    <SassCompilerRuntimeCopyToPublishDirectory>PreserveNewest</SassCompilerRuntimeCopyToPublishDirectory>
+  </PropertyGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Include="**/*.scss" />
   </ItemGroup>
-  
+
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
              AssemblyFile="$(SassCompilerTasksAssembly)" />
 
