@@ -136,16 +136,33 @@ internal class SassCompiler : ISassCompiler
 
     internal static (string Filename, string Snapshot) GetSassCommand()
     {
+        var (exePath, snapshotPath) = GetExeAndSnapshotPath();
+
         var attribute = Assembly.GetEntryAssembly()?.GetCustomAttributes<SassCompilerAttribute>().FirstOrDefault();
 
         if (attribute != null)
-            return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
+        {
+            if (exePath != null)
+            {
+                // When the runtime compiler is used, the machine the code is compiled on can be different from the 
+                // machine it runs on. So we check whether the filepath ends with the expected path for this platform,
+                // if not we fall back to searching in the assembly location.
+                if (attribute.SassBinary.EndsWith(exePath)
+                    && attribute.SassSnapshot.EndsWith(snapshotPath))
+                {
+                    return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
+                }
+            }
+            else
+            {
+                return (attribute.SassBinary, string.IsNullOrWhiteSpace(attribute.SassSnapshot) ? "" : $"\"{attribute.SassSnapshot}\"");
+            }
+        }
 
-        var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
-
-        var (exePath, snapshotPath) = GetExeAndSnapshotPath();
         if (exePath == null)
             return (null, null);
+
+        var assemblyLocation =  typeof(SassCompilerHostedService).Assembly.Location;
 
         var directory = Path.GetDirectoryName(assemblyLocation);
         while (!string.IsNullOrEmpty(directory) && directory != "/")
