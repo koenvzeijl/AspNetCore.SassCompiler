@@ -1,5 +1,5 @@
 ﻿<Project>
-  
+
   <PropertyGroup Condition="'$(SassCompilerIncludeRuntime)' == 'true'">
     <SassCompilerEnableWatcher>$(SassCompilerIncludeRuntime)</SassCompilerEnableWatcher>
     <SassCompilerRuntimeCopyToPublishDirectory>PreserveNewest</SassCompilerRuntimeCopyToPublishDirectory>
