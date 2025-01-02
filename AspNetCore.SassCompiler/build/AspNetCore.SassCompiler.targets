@@ -1,7 +1,16 @@
-<Project>
+﻿<Project>
 
   <PropertyGroup>
+    <IsOuterBuild Condition="'$(IsOuterBuild)' == ''">false</IsOuterBuild>
+
     <CompileSassBeforeTargets>Build;ResolveScopedCssInputs;BundleMinify;ResolveProjectStaticWebAssets</CompileSassBeforeTargets>
+    <!-- Use DispatchToInnerBuilds if it is a multi-targeted build -->
+    <CompileSassBeforeTargets Condition="$(IsOuterBuild)">DispatchToInnerBuilds</CompileSassBeforeTargets>
+
+    <ShouldRunTarget>false</ShouldRunTarget>
+    <!-- to prevent targets from being run extra times, enforce that only the outer
+         build of a multi-targeted project or a single-targeted build can run -->
+    <ShouldRunTarget Condition="'$(TargetFrameworks)' == '' OR $(IsOuterBuild)">true</ShouldRunTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(SassCompilerIncludeRuntime)' == 'true'">
@@ -16,7 +25,7 @@
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
              AssemblyFile="$(SassCompilerTasksAssembly)" />
 
-  <Target Name="Compile Sass" BeforeTargets="$(CompileSassBeforeTargets)" Condition="'$(DesignTimeBuild)' != 'true'">
+  <Target Name="Compile Sass" BeforeTargets="$(CompileSassBeforeTargets)" Condition="$(ShouldRunTarget) AND '$(DesignTimeBuild)' != 'true'">
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
                  SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"

@@ -1,0 +1,11 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <!-- this file only executes in the "outer" build of a multi-targeted project,
+         so we set this variable to keep track of that information -->
+    <IsOuterBuild>true</IsOuterBuild>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\build\AspNetCore.SassCompiler.props" />
+
+</Project>
