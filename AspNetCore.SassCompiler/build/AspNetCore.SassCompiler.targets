@@ -2,7 +2,15 @@
 
   <PropertyGroup>
     <CompileSassBeforeTargets>Build;ResolveScopedCssInputs;BundleMinify;ResolveProjectStaticWebAssets</CompileSassBeforeTargets>
+    <!-- Use "DispatchToInnerBuilds" if it is a cross-targeting build -->
+    <CompileSassBeforeTargets Condition="'$(IsCrossTargetingBuild)' == 'true'">DispatchToInnerBuilds</CompileSassBeforeTargets>
   </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <_InnerBuildProjects>
+      <Properties>IsCrossTargetedBuild=$(IsCrossTargetingBuild)</Properties>
+    </_InnerBuildProjects>
+  </ItemDefinitionGroup>
 
   <PropertyGroup Condition="'$(SassCompilerIncludeRuntime)' == 'true'">
     <SassCompilerEnableWatcher>$(SassCompilerIncludeRuntime)</SassCompilerEnableWatcher>
@@ -18,7 +26,7 @@
 
   <Target Name="Compile Sass"
           BeforeTargets="$(CompileSassBeforeTargets)"
-          Condition="'$(DesignTimeBuild)' != 'true'">
+          Condition="'$(IsCrossTargetedBuild)' != 'true' AND '$(DesignTimeBuild)' != 'true'">
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
                  SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"
