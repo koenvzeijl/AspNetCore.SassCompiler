@@ -16,7 +16,9 @@
   <UsingTask TaskName="AspNetCore.SassCompiler.CompileSass"
              AssemblyFile="$(SassCompilerTasksAssembly)" />
 
-  <Target Name="Compile Sass" BeforeTargets="$(CompileSassBeforeTargets)" Condition="'$(DesignTimeBuild)' != 'true'">
+  <Target Name="Compile Sass"
+          BeforeTargets="$(CompileSassBeforeTargets)"
+          Condition="'$(DesignTimeBuild)' != 'true'">
     <CompileSass AppsettingsFile="$(SassCompilerAppsettingsJson)"
                  SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"
