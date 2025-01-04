@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -275,6 +277,49 @@ namespace AspNetCore.SassCompiler
         }
 
         private (bool Success, string Output, string Error) GenerateCss(string arguments)
+        {
+            if (string.IsNullOrWhiteSpace(TargetFrameworks))
+            {
+                return CompileCss(arguments);
+            }
+
+            var mutexName = GetMutexName();
+
+            Log.LogMessage(MessageImportance.Normal,
+                $"TargetFrameworks: '{TargetFrameworks}'; using mutex {mutexName}");
+
+            using var mutex = new Mutex(false, mutexName);
+
+            try
+            {
+                mutex.WaitOne();
+            }
+            catch (AbandonedMutexException)
+            {
+                return (false, string.Empty, $"Mutex {mutexName} was abandoned");
+            }
+
+            try
+            {
+                return CompileCss(arguments);
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
+            }
+
+            string GetMutexName()
+            {
+                using var sha256 = SHA256.Create();
+
+                var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(arguments));
+                var hashString = BitConverter.ToString(hash).Replace("-", "");
+
+                return $"{nameof(AspNetCore)}.{nameof(SassCompiler)}_{hashString}";
+            }
+        }
+
+        private (bool Success, string Output, string Error) CompileCss(string arguments)
         {
             var compiler = new Process();
             compiler.StartInfo = new ProcessStartInfo
