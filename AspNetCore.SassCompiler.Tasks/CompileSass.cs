@@ -30,6 +30,10 @@ namespace AspNetCore.SassCompiler
 
         public string Configuration { get; set; }
 
+        public string TargetFramework { get; set; }
+
+        public string TargetFrameworks { get; set; }
+
         [Output]
         public ITaskItem[] GeneratedFiles { get; set; } = Array.Empty<ITaskItem>();
 

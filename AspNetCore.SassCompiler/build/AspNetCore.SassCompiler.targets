@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
 
   <PropertyGroup Condition="'$(SassCompilerIncludeRuntime)' == 'true'">
     <SassCompilerEnableWatcher>$(SassCompilerIncludeRuntime)</SassCompilerEnableWatcher>
@@ -19,7 +19,9 @@
                  SassCompilerFile="$(SassCompilerSassCompilerJson)"
                  Command="$(SassCompilerBuildCommand)"
                  Snapshot="$(SassCompilerBuildSnapshot)"
-                 Configuration="$(SassCompilerConfiguration)">
+                 Configuration="$(SassCompilerConfiguration)"
+                 TargetFramework="$(TargetFramework)"
+                 TargetFrameworks="$(TargetFrameworks)">
       <Output TaskParameter="GeneratedFiles"
               ItemName="CompiledCssFiles" />
     </CompileSass>
