@@ -294,11 +294,11 @@ namespace AspNetCore.SassCompiler
             {
                 error += e.Data + Environment.NewLine;
             };
-            
+
             compiler.Start();
 
             compiler.BeginErrorReadLine();
-            
+
             var output = compiler.StandardOutput.ReadToEnd();
 
             compiler.WaitForExit();
