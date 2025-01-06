@@ -286,7 +286,7 @@ namespace AspNetCore.SassCompiler
             var mutexName = GetMutexName();
 
             Log.LogMessage(MessageImportance.Normal,
-                $"TargetFrameworks: '{TargetFrameworks}'; using mutex {mutexName}");
+                $"TargetFramework: '{TargetFramework}'; TargetFrameworks: '{TargetFrameworks}'; using mutex {mutexName}");
 
             using var mutex = new Mutex(false, mutexName);
 
