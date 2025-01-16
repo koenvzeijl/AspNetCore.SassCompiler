@@ -32,6 +32,32 @@ public class SassCompilerTests
         }
     }
 
+    [Fact]
+    public async Task CompileAsync_WithoutStreams_ScssWithDeprecationWarnings_Success()
+    {
+        // Arrange
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
+
+        var tempDirectory = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(tempDirectory);
+
+        try
+        {
+            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), "$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }");
+
+            // Act
+            await sassCompiler.CompileAsync(new[] { Path.Join(tempDirectory, "input"), Path.Join(tempDirectory, "output"), "--no-source-map" });
+            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output"));
+
+            // Assert
+            Assert.Equal("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n.test1 {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n", result);
+        }
+        finally
+        {
+            Directory.Delete(tempDirectory, true);
+        }
+    }
+
     [Theory]
     [InlineData("--watch")]
     [InlineData("--interactive")]
@@ -114,5 +140,20 @@ public class SassCompilerTests
 
         // Assert
         Assert.Equal("body {\n  color: black;\n}\n", result);
+    }
+
+    [Fact]
+    public async Task CompileToStringAsync_ScssWithDeprecationWarnings_Success() 
+    {
+        // Arrange
+        var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
+
+        var input = new MemoryStream(Encoding.UTF8.GetBytes("$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }"));
+
+        // Act
+        var result = await sassCompiler.CompileToStringAsync(input, Array.Empty<string>());
+
+        // Assert
+        Assert.Equal("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n.test1 {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n", result);
     }
 }
