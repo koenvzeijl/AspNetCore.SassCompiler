@@ -43,8 +43,8 @@ internal class SassCompiler : ISassCompiler
 
         process.Start();
         ChildProcessTracker.AddProcess(process);
-        Task outputTask = process.StandardOutput.BaseStream.CopyToAsync(Stream.Null);
-        Task errorTask = process.StandardError.BaseStream.CopyToAsync(errorOutput);
+        var outputTask = process.StandardOutput.BaseStream.CopyToAsync(Stream.Null);
+        var errorTask = process.StandardError.BaseStream.CopyToAsync(errorOutput);
         await Task.WhenAll(outputTask, errorTask, process.WaitForExitAsync());
 
         if (process.ExitCode != 0)
@@ -83,8 +83,8 @@ internal class SassCompiler : ISassCompiler
         ChildProcessTracker.AddProcess(process);
         await input.CopyToAsync(process.StandardInput.BaseStream);
         await process.StandardInput.DisposeAsync();
-        Task outputTask = process.StandardOutput.BaseStream.CopyToAsync(output);
-        Task errorTask = process.StandardError.BaseStream.CopyToAsync(errorOutput);
+        var outputTask = process.StandardOutput.BaseStream.CopyToAsync(output);
+        var errorTask = process.StandardError.BaseStream.CopyToAsync(errorOutput);
         await Task.WhenAll(outputTask, errorTask, process.WaitForExitAsync());
 
         if (process.ExitCode != 0)

@@ -32,7 +32,7 @@ public class SassCompilerTests
         }
     }
 
-    [Fact]
+    [Fact(Timeout=1000)]
     public async Task CompileAsync_WithoutStreams_ScssWithDeprecationWarnings_Success()
     {
         // Arrange
@@ -43,14 +43,28 @@ public class SassCompilerTests
 
         try
         {
-            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), "$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }");
+            var sb = new StringBuilder("$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}");
+            var testClassCount = 65;
+            for(var i = 0; i < testClassCount; i++) {
+                sb.AppendFormat(".test{0} {{ background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }}", i);
+            }
+            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), sb.ToString());
 
             // Act
             await sassCompiler.CompileAsync(new[] { Path.Join(tempDirectory, "input"), Path.Join(tempDirectory, "output"), "--no-source-map" });
-            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output"));
+            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output")); 
 
             // Assert
-            Assert.Equal("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n.test1 {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n", result);
+            var expectedSb = new StringBuilder("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
+            for(var i = 0; i < testClassCount; i++) {
+                expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}}\n", i);
+                // don't add additional newline for last item
+                if(i < testClassCount-1){
+                    expectedSb.Append("\n");
+                }
+            }
+
+            Assert.Equal(expectedSb.ToString(), result);
         }
         finally
         {
@@ -142,18 +156,32 @@ public class SassCompilerTests
         Assert.Equal("body {\n  color: black;\n}\n", result);
     }
 
-    [Fact]
+    [Fact(Timeout=1000)]
     public async Task CompileToStringAsync_ScssWithDeprecationWarnings_Success() 
     {
         // Arrange
         var sassCompiler = new SassCompiler(NullLogger<SassCompiler>.Instance);
 
-        var input = new MemoryStream(Encoding.UTF8.GetBytes("$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }"));
+        var sb = new StringBuilder("$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}");
+        var testClassCount = 65;
+        for(var i = 0; i < testClassCount; i++) {
+            sb.AppendFormat(".test{0} {{ background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }}", i);
+        }
+
+        var input = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 
         // Act
         var result = await sassCompiler.CompileToStringAsync(input, Array.Empty<string>());
-
+        
         // Assert
-        Assert.Equal("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n.test1 {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n", result);
+        var expectedSb = new StringBuilder("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
+        for(var i = 0; i < testClassCount; i++) {
+            expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}}\n", i);
+            // don't add additional newline for last item
+            if(i < testClassCount-1){
+                expectedSb.Append("\n");
+            }
+        }
+        Assert.Equal(expectedSb.ToString(), result);
     }
 }
