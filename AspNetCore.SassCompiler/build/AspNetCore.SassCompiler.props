@@ -35,7 +35,7 @@
     <SassCompilerRuntimeCopyToPublishDirectory>Never</SassCompilerRuntimeCopyToPublishDirectory>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false'">
+  <ItemGroup Condition="'$(SassCompilerEnableWatcher)' != 'false' AND '$(_IsPublishing)' != 'true'">
     <AssemblyAttribute Include="AspNetCore.SassCompiler.SassCompilerAttribute">
       <_Parameter1>$(SassCompilerBuildCommand)</_Parameter1>
       <_Parameter2>$(SassCompilerBuildSnapshot)</_Parameter2>
