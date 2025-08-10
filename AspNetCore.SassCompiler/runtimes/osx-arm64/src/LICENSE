@@ -614,8 +614,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 
-coverage, dartdoc, glob, http, http_parser, matcher, path, pool, pub_semver,
-source_span, string_scanner, test and watcher license:
+coverage, dart_style, dartdoc, glob, http, http_parser, matcher, path, pool,
+pub_semver, source_span, string_scanner, test and watcher license:
 
 Copyright 2014, the Dart project authors. 
 
@@ -1186,7 +1186,7 @@ petitparser license:
 
 The MIT License
 
-Copyright (c) 2006-2025 Lukas Renggli.
+Copyright (c) 2006-2024 Lukas Renggli.
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1645,7 +1645,7 @@ xml license:
 
 The MIT License
 
-Copyright (c) 2006-2023 Lukas Renggli.
+Copyright (c) 2006-2025 Lukas Renggli.
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
