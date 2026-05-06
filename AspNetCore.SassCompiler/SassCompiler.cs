@@ -192,7 +192,7 @@ internal class SassCompiler : ISassCompiler
             return RuntimeInformation.OSArchitecture switch
             {
                 Architecture.X64 => ("runtimes/linux-x64/src/dart", "runtimes/linux-x64/src/sass.snapshot"),
-                Architecture.Arm64 => ("runtimes/linux-arm64/src/dart", "runtimes/linux-x64/src/sass.snapshot"),
+                Architecture.Arm64 => ("runtimes/linux-arm64/src/dart", "runtimes/linux-arm64/src/sass.snapshot"),
                 _ => (null, null),
             };
         }
