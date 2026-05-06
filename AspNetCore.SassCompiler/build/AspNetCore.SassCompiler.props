@@ -29,6 +29,8 @@
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(Configuration)' == 'Release'">false</SassCompilerEnableWatcher>
     <SassCompilerEnableWatcher Condition="'$(SassCompilerEnableWatcher)' == '' AND '$(OutputType)' == 'Library'">false</SassCompilerEnableWatcher>
 
+    <SassCompilerEnableBuildTask Condition="'$(SassCompilerEnableBuildTask)' == ''">true</SassCompilerEnableBuildTask>
+
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">$(Configuration)</SassCompilerConfiguration>
     <SassCompilerConfiguration Condition="'$(SassCompilerConfiguration)' == ''">Debug</SassCompilerConfiguration>
 
