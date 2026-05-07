@@ -128,6 +128,17 @@ have the `ISassCompiler` available, you can use the `AddSassCompilerCore()` meth
 method on the `IServiceCollection`. This will register what is required to use the `ISassCompiler` interface without
 registering the hosted service.
 
+If you are only using `ISassCompiler` at runtime and want to disable the MSBuild compile-on-build task entirely, you can
+add the following property to your `.csproj` file:
+
+```xml
+<PropertyGroup>
+  <SassCompilerEnableBuildTask>false</SassCompilerEnableBuildTask>
+</PropertyGroup>
+```
+
+This prevents the Sass MSBuild task from running during `build` and `publish`, while leaving `ISassCompiler` fully functional at runtime.
+
 ## Publish
 
 This library also includes an MSBuild task that runs during the publish of your application. Because of this you don't need to include
