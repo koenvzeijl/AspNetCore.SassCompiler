@@ -1,0 +1,13 @@
+<Project>
+
+    <PropertyGroup>
+        <DebugType>embedded</DebugType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryBranch Condition="'$(GITHUB_REF)' != ''">$(GITHUB_REF)</RepositoryBranch>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+</Project>
