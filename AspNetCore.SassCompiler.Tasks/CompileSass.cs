@@ -214,6 +214,12 @@ namespace AspNetCore.SassCompiler
         private IEnumerable<ITaskItem> GenerateCss(SassCompilerOptions options)
         {
             var rootFolder = Directory.GetCurrentDirectory();
+            var compilations = options.GetAllCompilations().ToArray();
+            using var pathContext = SassCliPathHelper.CreateContext(
+                rootFolder,
+                compilations.SelectMany(compilation => new[] { compilation.Source, compilation.Target })
+                    .Concat(options.IncludePaths ?? Array.Empty<string>())
+                    .ToArray());
 
             var processArguments = new StringBuilder();
             processArguments.Append(Snapshot);
@@ -223,15 +229,15 @@ namespace AspNetCore.SassCompiler
             {
                 foreach (var includePath in options.IncludePaths)
                 {
-                    processArguments.AppendFormat(" --load-path={0}", includePath);
+                    processArguments.Append(pathContext.CreateLoadPathArgument(includePath));
                 }
             }
 
             var hasSources = false;
-            foreach (var compilation in options.GetAllCompilations())
+            foreach (var compilation in compilations)
             {
-                var fullSource = Path.GetFullPath(Path.Combine(rootFolder, compilation.Source));
-                var fullTarget = Path.GetFullPath(Path.Combine(rootFolder, compilation.Target));
+                var fullSource = pathContext.GetFullPath(compilation.Source);
+                var fullTarget = pathContext.GetFullPath(compilation.Target);
 
                 if (!Directory.Exists(fullSource) && !File.Exists(fullSource))
                 {
@@ -242,7 +248,7 @@ namespace AspNetCore.SassCompiler
                 }
 
                 hasSources = true;
-                processArguments.AppendFormat(" \"{0}\":\"{1}\"", fullSource, fullTarget);
+                processArguments.Append(pathContext.CreateUpdateMappingArgument(compilation.Source, compilation.Target));
             }
 
             if (!hasSources)
@@ -252,7 +258,7 @@ namespace AspNetCore.SassCompiler
 
             var arguments = processArguments.ToString();
 
-            var (success, output, error) = GenerateCss(arguments);
+            var (success, output, error) = GenerateCss(pathContext.WorkingDirectory, arguments);
 
             if (!success)
             {
@@ -276,11 +282,11 @@ namespace AspNetCore.SassCompiler
             }
         }
 
-        private (bool Success, string Output, string Error) GenerateCss(string arguments)
+        private (bool Success, string Output, string Error) GenerateCss(string workingDirectory, string arguments)
         {
             if (string.IsNullOrWhiteSpace(TargetFrameworks))
             {
-                return CompileCss(arguments);
+                return CompileCss(workingDirectory, arguments);
             }
 
             var mutexName = GetMutexName();
@@ -301,7 +307,7 @@ namespace AspNetCore.SassCompiler
 
             try
             {
-                return CompileCss(arguments);
+                return CompileCss(workingDirectory, arguments);
             }
             finally
             {
@@ -319,13 +325,14 @@ namespace AspNetCore.SassCompiler
             }
         }
 
-        private (bool Success, string Output, string Error) CompileCss(string arguments)
+        private (bool Success, string Output, string Error) CompileCss(string workingDirectory, string arguments)
         {
             var compiler = new Process();
             compiler.StartInfo = new ProcessStartInfo
             {
                 FileName = Command,
                 Arguments = arguments,
+                WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,

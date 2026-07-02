@@ -18,6 +18,8 @@ dotnet add package AspNetCore.SassCompiler
 After adding the package, the Sass styles from the Source (defaults to: Styles) will automatically be compiled into `.css` files in the TargetFolder (defaults to: wwwroot\css) on build. 
 You can also adjust the default configuration in the appsettings.json or sasscompiler.json, do note that when using `appsettings.json` the configuration needs to be nested under a "SassCompiler" property, but when you're using `sasscompiler.json` the settings should _not_ be nested.
 
+On Windows, the package runs dart-sass from a short temporary working path for local builds. This avoids dart-sass directory-listing failures and Windows process-start failures for deep scoped CSS paths, while keeping the normal directory-watch behavior intact.
+
 ### Available options
 
 | Name              | Default value                              | Description                                                                                                                                       |
