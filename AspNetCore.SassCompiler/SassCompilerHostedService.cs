@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,7 @@ namespace AspNetCore.SassCompiler
         private readonly SassCompilerOptions _options;
 
         private Process _process;
+        private IDisposable _pathContext;
         private bool _isStopping = false;
 
         public SassCompilerHostedService(IConfiguration configuration, ILogger<SassCompilerHostedService> logger)
@@ -83,6 +85,9 @@ namespace AspNetCore.SassCompiler
                 _process = null;
             }
 
+            _pathContext?.Dispose();
+            _pathContext = null;
+
             return Task.CompletedTask;
         }
 
@@ -99,6 +104,9 @@ namespace AspNetCore.SassCompiler
                 _process.Dispose();
                 _process = null;
             }
+
+            _pathContext?.Dispose();
+            _pathContext = null;
         }
 
         private void StartProcess()
@@ -151,6 +159,14 @@ namespace AspNetCore.SassCompiler
         private Process GetSassProcess()
         {
             var rootFolder = Directory.GetCurrentDirectory();
+            var compilations = _options.GetAllCompilations().ToArray();
+            _pathContext?.Dispose();
+            var pathContext = SassCliPathHelper.CreateContext(
+                rootFolder,
+                compilations.SelectMany(compilation => new[] { compilation.Source, compilation.Target })
+                    .Concat(_options.IncludePaths ?? Array.Empty<string>())
+                    .ToArray());
+            _pathContext = pathContext;
 
             var processArguments = new StringBuilder();
             processArguments.Append(" --error-css");
@@ -161,22 +177,23 @@ namespace AspNetCore.SassCompiler
             {
                 foreach (var includePath in _options.IncludePaths)
                 {
-                    processArguments.Append($" --load-path={includePath}");
+                    processArguments.Append(pathContext.CreateLoadPathArgument(includePath));
                 }
             }
 
-            foreach (var compilation in _options.GetAllCompilations())
+            foreach (var compilation in compilations)
             {
-                var fullSource = Path.GetFullPath(Path.Combine(rootFolder, compilation.Source));
-                var fullTarget = Path.GetFullPath(Path.Combine(rootFolder, compilation.Target));
+                var fullSource = pathContext.GetFullPath(compilation.Source);
+                var fullTarget = pathContext.GetFullPath(compilation.Target);
 
                 if (!Directory.Exists(fullSource) && !File.Exists(fullSource))
                     continue;
 
-                processArguments.Append($" \"{fullSource}\":\"{fullTarget}\"");
+                processArguments.Append(pathContext.CreateUpdateMappingArgument(compilation.Source, compilation.Target));
             }
 
             var process = SassCompiler.CreateSassProcess(processArguments.ToString());
+            process.StartInfo.WorkingDirectory = pathContext.WorkingDirectory;
             return process;
         }
     }
