@@ -27,10 +27,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: NuGet Login
-        uses: NuGet/login@v1
-        id: login
-        with:
-          user: koenvzeijl
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: koenvzeijl
     - name: Publish NuGet
       id: publish_nuget
       uses: alirezanet/publish-nuget@v3.1.0
