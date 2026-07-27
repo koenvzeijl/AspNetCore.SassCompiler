@@ -55,9 +55,9 @@ public class SassCompilerTests
             var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output")); 
 
             // Assert
-            var expectedSb = new StringBuilder("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
+            var expectedSb = new StringBuilder("body {\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
             for(var i = 0; i < testClassCount; i++) {
-                expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}}\n", i);
+                expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}}\n", i);
                 // don't add additional newline for last item
                 if(i < testClassCount-1){
                     expectedSb.Append("\n");
@@ -174,9 +174,9 @@ public class SassCompilerTests
         var result = await sassCompiler.CompileToStringAsync(input, Array.Empty<string>());
         
         // Assert
-        var expectedSb = new StringBuilder("body {\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
+        var expectedSb = new StringBuilder("body {\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
         for(var i = 0; i < testClassCount; i++) {
-            expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(229.5, 229.5, 229.5);\n  color: white;\n}}\n", i);
+            expectedSb.AppendFormat(".test{0} {{\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}}\n", i);
             // don't add additional newline for last item
             if(i < testClassCount-1){
                 expectedSb.Append("\n");
