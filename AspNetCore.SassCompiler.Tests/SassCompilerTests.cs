@@ -17,11 +17,11 @@ public class SassCompilerTests
 
         try
         {
-            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), "body { color: black; }");
+            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), "body { color: black; }", TestContext.Current.CancellationToken);
 
             // Act
             await sassCompiler.CompileAsync(new[] { Path.Join(tempDirectory, "input"), Path.Join(tempDirectory, "output"), "--no-source-map" });
-            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output"));
+            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output"), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal("body {\n  color: black;\n}\n", result);
@@ -48,11 +48,11 @@ public class SassCompilerTests
             for(var i = 0; i < testClassCount; i++) {
                 sb.AppendFormat(".test{0} {{ background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }}", i);
             }
-            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), sb.ToString());
+            await File.WriteAllTextAsync(Path.Join(tempDirectory, "input"), sb.ToString(), TestContext.Current.CancellationToken);
 
             // Act
-            await sassCompiler.CompileAsync(new[] { Path.Join(tempDirectory, "input"), Path.Join(tempDirectory, "output"), "--no-source-map" });
-            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output")); 
+            await sassCompiler.CompileAsync(new[] { Path.Join(tempDirectory, "input"), Path.Join(tempDirectory, "output"), "--no-source-map" }).WaitAsync(TestContext.Current.CancellationToken);
+            var result = await File.ReadAllTextAsync(Path.Join(tempDirectory, "output"), TestContext.Current.CancellationToken);
 
             // Assert
             var expectedSb = new StringBuilder("body {\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");
@@ -118,7 +118,7 @@ public class SassCompilerTests
 
         // Act
         var output = await sassCompiler.CompileAsync(input, Array.Empty<string>());
-        var result = await new StreamReader(output).ReadToEndAsync();
+        var result = await new StreamReader(output).ReadToEndAsync(TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal("body {\n  color: black;\n}\n", result);
@@ -171,7 +171,7 @@ public class SassCompilerTests
         var input = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 
         // Act
-        var result = await sassCompiler.CompileToStringAsync(input, Array.Empty<string>());
+        var result = await sassCompiler.CompileToStringAsync(input, Array.Empty<string>()).WaitAsync(TestContext.Current.CancellationToken);
         
         // Assert
         var expectedSb = new StringBuilder("body {\n  background-color: rgb(90%, 90%, 90%);\n  color: white;\n}\n\n.btn {\n  color: white;\n}\n\n");

@@ -4,7 +4,7 @@
   <Import Project="..\..\AspNetCore.SassCompiler\build\AspNetCore.SassCompiler.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.31" />
   </ItemGroup>
 
   <ItemGroup>
