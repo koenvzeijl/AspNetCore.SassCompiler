@@ -105,7 +105,7 @@ public class SassCompilerTests
         // Assert
         var exception = await Assert.ThrowsAsync<SassCompilerException>(Act);
         Assert.Equal("Sass process exited with non-zero exit code: 65.", exception.Message);
-        Assert.StartsWith("Error: expected \"}\".", exception.ErrorOutput);
+        Assert.StartsWith("Error: expected end of rule.", exception.ErrorOutput);
     }
 
     [Fact]
